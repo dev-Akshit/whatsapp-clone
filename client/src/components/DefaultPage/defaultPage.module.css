@@ -1,0 +1,50 @@
+.defaultContainer {
+    display: flex;
+    width: 150vh;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #1b262cf8;
+  }
+  
+  .content {
+    text-align: center;
+    color: #e9edef;
+  }
+  
+  .whatsappLogo {
+    width: 50vh;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #8696a0;
+    margin-bottom: 20px;
+  }
+  
+  .downloadButton {
+    background-color: #25d366;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .downloadButton:hover {
+    background-color: #1ebe5d;
+  }
+  
+  .encryptionNote {
+    font-size: 14px;
+    color: #8696a0;
+    margin-top: 20px;
+  }
+  

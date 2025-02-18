@@ -1,0 +1,35 @@
+.chatArea {
+    height: 81vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #0b141a;
+  }
+  
+  .messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+  }
+  
+  .myMessage {
+    align-self: flex-end;
+    background-color: #005c4b;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 5px 0;
+    max-width: 60%;
+  }
+  
+  .otherMessage {
+    align-self: flex-start;
+    background-color: #202c33;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 5px 0;
+    max-width: 60%;
+  }
+  
+  

@@ -1,0 +1,46 @@
+.header {
+    display: flex;
+    width: 138vh;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #202c33;
+    color: white;
+    border-bottom: 1px solid #2a3942;
+  }
+  
+  .userInfo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background-color: gray;
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+  
+  .name {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+  }
+  
+  .icon {
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s;
+  }
+  
+  .icon:hover {
+    color: #00a884;
+  }
+  

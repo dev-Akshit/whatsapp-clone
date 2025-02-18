@@ -1,0 +1,11 @@
+html, body, #root {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  .right-panel{
+    height: 100vh;
+  }

@@ -1,0 +1,58 @@
+.sidebar {
+  height: 100vh;
+  background-color: #1e2d36;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+.icon {
+  color: #b1b3b5;
+  font-size: 20px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: white;
+}
+
+/* Tooltip Styling */
+.tooltip {
+  position: absolute;
+  left: 45px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-style: arial;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.iconWrapper:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+    padding: 10px;
+  }
+}

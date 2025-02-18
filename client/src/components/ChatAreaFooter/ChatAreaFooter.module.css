@@ -1,0 +1,56 @@
+.inputArea {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #202c33;
+  }
+  
+  .iconButton {
+    background: none;
+    border: none;
+    color: rgb(228, 218, 218);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .inputWrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    background-color: #2a3942;
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin: 0 10px;
+  }
+  
+  .stickerIcon {
+    margin-right: 10px;
+    color: rgb(153, 148, 148);
+    cursor: pointer;
+  }
+  
+  .inputWrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: rgb(228, 218, 218);
+    font-size: 16px;
+  }
+  
+  .sendButton {
+    padding: 8px 15px;
+    border: none;
+    background-color: #00a884;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .sendButton:hover {
+    background-color: #00806d;
+  }
+  
