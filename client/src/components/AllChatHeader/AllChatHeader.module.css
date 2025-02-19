@@ -8,13 +8,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: rgb(192, 192, 192);
     padding-left: 10px;
   }
   
   .icons {
     display: flex;
-    gap: 10px;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 50%;
   }
   
   .icon {
@@ -26,6 +28,74 @@
   .icon:hover {
     color: #00a884;
   }
+  
+  .chat{
+    height: 120px;
+    width: 180px;
+    margin-top: 31vh;
+    margin-left: 25vh;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #2a3942;
+    color: #ffffff;
+  }
+
+.chatItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.chatItem:hover {
+  background-color: #3f4c53;
+  border-radius: 10px;
+}
+
+.headIcon {
+    color: #ffffff;
+    font-size: 24px;
+    margin-right: 12px;
+    background-color: #00a884;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.menuBar {
+  margin-top: 40vh;
+  margin-left: 23vh;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: fixed;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2a3942;
+  color: #ffffff;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  gap: 10px;
+  font-size: 16px;
+}
+
+.menuIcon {
+  padding: 5px;
+}
+
+.menuIcon:hover {
+  background-color: #3f4c53;
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}
   
   /* Search Bar */
   .searchBar {

@@ -1,11 +1,19 @@
 html, body, #root {
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
     overflow-y: hidden;
     scrollbar-width: none;
   }
-  .right-panel{
-    height: 100vh;
-  }
+
+/* Ensure the app layout stays fixed */
+.appcontainer {
+  display: flex;
+  height: 100vh; /* Full screen height */
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 80px; /* Adjust width as needed */
+  min-width: 80px;
+  background-color: #111b21;
+  height: 100vh;
+  overflow: hidden;
+}

@@ -49,6 +49,7 @@
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  z-index: 100;
 }
 @media (max-width: 768px) {
   .sidebar {

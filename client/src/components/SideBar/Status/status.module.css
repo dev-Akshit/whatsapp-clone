@@ -1,0 +1,113 @@
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #111b21;
+  color: white;
+  height: 100vh;
+  width: 357px;
+  padding: 10px 15px;
+}
+
+.header {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2a3942;
+}
+
+.myStatus {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #2a3942;
+}
+
+.profilePic {
+  width: 50px;
+  height: 50px;
+  background-color: grey;
+  border-radius: 50%;
+  margin-right: 10px;
+  position: relative;
+}
+
+.addIcon {
+  color: #00a884;
+  font-size: 22px;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusInfo strong {
+  font-size: 15px;
+}
+
+.statusInfo p {
+  font-size: 13px;
+  color: #8696a0;
+}
+
+.sectionTitle {
+  margin-top: 15px;
+  font-size: 20px;
+  color: #00a884;
+}
+
+.recentStatuses {
+  margin-top: 10px;
+  gap: 10px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.statusImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #00a884;
+}
+
+.statusItem strong {
+  font-size: 14px;
+}
+
+.statusItem p {
+  font-size: 12px;
+  color: #8696a0;
+}
+
+.sectionTitleMuted {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #8696a0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.showMuted {
+  color: #00a884;
+  cursor: pointer;
+}
+
+.encryptionMessage {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #8696a0;
+  text-align: center;
+}
+
+.encryptionHighlight {
+  color: #00a884;
+}

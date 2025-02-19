@@ -7,6 +7,7 @@
     background-color: #202c33;
     color: white;
     border-bottom: 1px solid #2a3942;
+    overflow: hidden;
   }
   
   .userInfo {
