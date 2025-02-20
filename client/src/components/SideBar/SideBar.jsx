@@ -28,7 +28,7 @@ const Sidebar = ({ setActivePanel }) => {
           <span className={styles.tooltip}>Communities</span>
         </div>
         <div className={styles.iconWrapper} onClick={() => setActivePanel("meta-ai")}>
-          <FaMeta className={styles.icon} />
+          <img src="metaAilogo.png" className={styles.metaIcon} />
           <span className={styles.tooltip}>Meta AI</span>
         </div>
       </div>

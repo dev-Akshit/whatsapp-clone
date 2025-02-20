@@ -1,0 +1,114 @@
+.channelsContainer {
+    height: 100vh;
+    width: 357px;
+    background-color: #111b21;
+    padding: 15px;
+    border-bottom: 1px solid #2a3942;
+    color: rgb(230, 224, 224);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.addIcon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.addIcon:hover {
+    color: #00a884;
+}
+
+.subHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers text horizontally */
+    text-align: center; /* Ensures text is centered within the div */
+    color: #b1b3b5;
+}
+
+.subPara{
+    margin-top: 5px;
+    margin-bottom: 3px;
+    font-size: 20px;
+    color: rgb(230, 224, 224);
+
+}
+
+.channelList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.channelItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures Follow button moves to the right */
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border-bottom: 1px solid #424242e1;
+}
+
+.channelDetails {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows text to take up remaining space */
+}
+
+.followers {
+    margin: 0px;
+    font-size: 14px;
+    color: #b1b3b5;
+}
+
+.followBtn {
+    color: #00a884;
+    background-color: transparent;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #3a3b3b;
+    font-size: 15px;
+    margin-left: auto;
+}
+
+
+.channelItem:hover {
+    background-color: #2a394293;
+}
+
+.channelImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.bottom{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottomBtn{
+    background-color: #00a884;
+    color: #111b21;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.bottomBtn:hover{
+    background-color: #3ccaab;
+}

@@ -1,0 +1,73 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #111b21;
+    height: 100vh;
+    width: 347px;
+    padding: 20px;
+    color: rgb(230, 224, 224);
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.imageContainer {
+    background-color: #1e2a30;
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.mainIcon {
+    height: 200px;
+    width: 340px;
+}
+
+.heading {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 14px;
+    color: #b1b3b5;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.exampleLink {
+    font-size: 14px;
+    color: #00a884;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.exampleLink:hover {
+    text-decoration: underline;
+}
+
+.startButton {
+    background-color: #00a884;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.startButton:hover {
+    background-color: #008f74;
+}

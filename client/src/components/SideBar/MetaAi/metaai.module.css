@@ -1,0 +1,45 @@
+.metaContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: #111b21;
+    padding: 15px;
+    width: 357px;
+    height: 100vh;
+    border-bottom: 1px solid #2a3942;
+}
+
+.metaSection {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.metaSection:hover {
+    background-color: #2a3942;
+}
+
+.metaImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.metaText {
+    display: flex;
+    flex-direction: column;
+}
+
+.metaName {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.metaDescription {
+    font-size: 14px;
+    color: #b1b3b5;
+}

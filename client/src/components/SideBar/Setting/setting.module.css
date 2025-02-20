@@ -1,0 +1,118 @@
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #111b21;
+    height: 100vh;
+    padding: 20px;
+    color: rgb(230, 224, 224);
+    width: 350px;
+}
+
+.title {
+    font-size: 24px;
+    margin-top: 5px;
+    align-self: flex-start;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: #202c33;
+    padding: 8px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.searchIcon {
+    color: #b1b3b5;
+    margin-right: 10px;
+}
+
+.searchInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-size: 14px;
+}
+
+.profileSection {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.profileSection:hover{
+    background-color: #1e2a30;
+}
+
+.profileImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 51%;
+    margin-right: 10px;
+}
+
+.profileText {
+    display: flex;
+    flex-direction: column;
+}
+
+.profileName {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #b1b3b5;
+}
+
+.profileStatus {
+    font-size: 14px;
+    color: #b1b3b5;
+    margin-top: 5px;
+}
+
+.optionsList {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.optionItem {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #2a3942;
+    cursor: pointer;
+}
+
+.optionItem:hover {
+    background-color: #2a3942;
+}
+
+.optionIcon {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+/* Logout */
+.logout {
+    display: flex;
+    align-items: center;
+    color: rgb(209, 79, 74);
+    padding: 15px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.logoutIcon {
+    margin-right: 10px;
+}
+
+.logout:hover {
+    background-color: #1e2a30;
+}
