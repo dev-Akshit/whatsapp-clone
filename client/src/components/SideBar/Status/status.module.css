@@ -2,10 +2,9 @@
   display: flex;
   flex-direction: column;
   background-color: #111b21;
-  color: white;
+  color: rgb(230, 224, 224);
   height: 100vh;
-  width: 357px;
-  padding: 10px 15px;
+  padding: 16px 15px;
 }
 
 .header {

@@ -11,7 +11,7 @@ const AllChatHeader = ({ searchQuery, setSearchQuery }) => {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.header}>
-        <h2>Chats</h2>
+        <h2 className={styles.headerText}>Chats</h2>
         <div className={styles.icons}>
           <div className={styles.newChat}>
           <RiChatNewFill 

@@ -1,6 +1,6 @@
 .chatList {
-    height: 80vh;
-    width: 60vh;
+    height: 82vh;
+    /* width: 60vh; */
     flex: 1;
     background-color: #111b21;
     overflow-y: auto;

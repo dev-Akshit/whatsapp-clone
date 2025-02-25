@@ -41,16 +41,8 @@
     font-size: 16px;
   }
   
-  .sendButton {
-    padding: 8px 15px;
-    border: none;
-    background-color: #00a884;
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
   .sendButton:hover {
-    background-color: #00806d;
+    color: #0aa18b;
+    transition: 0.3s;
   }
   

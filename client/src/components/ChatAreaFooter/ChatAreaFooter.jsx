@@ -25,7 +25,7 @@ const ChatAreaFooter = () => {
       </div>
       <button className={styles.iconButton}>
         {message.trim() ? (
-          <PiPaperPlaneTiltBold size="26" title="Send" />
+          <PiPaperPlaneTiltBold size="26" title="Send" className={styles.sendButton} />
         ) : (
           <MdKeyboardVoice size="26" title="Voice" />
         )}

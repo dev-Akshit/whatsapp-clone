@@ -8,10 +8,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: rgb(192, 192, 192);
+    color: rgb(230, 224, 224);
     padding-left: 10px;
   }
   
+  .headerText{
+    margin-top: 10px;
+  }
+
   .icons {
     display: flex;
     gap: 20px;

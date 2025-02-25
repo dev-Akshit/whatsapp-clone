@@ -16,10 +16,8 @@ const Status = () => {
 
   return (
     <div className={styles.statusContainer}>
-      {/* Header */}
-      <div className={styles.header}>Status</div>
+      <h2 className={styles.header}>Status</h2>
 
-      {/* My Status */}
       <div className={styles.myStatus}>
         <div className={styles.profilePic}></div>
         <div className={styles.statusInfo}>
@@ -29,7 +27,6 @@ const Status = () => {
         <FaPlusCircle className={styles.addIcon} />
       </div>
 
-      {/* Recent Statuses */}
       <div className={styles.sectionTitle}>Recent</div>
       <div className={styles.recentStatuses}>
         {recentStatuses.map((status, index) => (
@@ -43,12 +40,10 @@ const Status = () => {
         ))}
       </div>
 
-      {/* Muted Section */}
       <div className={styles.sectionTitleMuted}>
         Muted <span className={styles.showMuted}>Show</span>
       </div>
 
-      {/* Footer Encryption Message */}
       <div className={styles.encryptionMessage}>
         🔒 Your status updates are <span className={styles.encryptionHighlight}>end-to-end encrypted</span>
       </div>

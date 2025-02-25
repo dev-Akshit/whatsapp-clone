@@ -18,8 +18,9 @@
     color: white;
     padding: 8px 12px;
     border-radius: 8px;
-    margin: 5px 0;
-    max-width: 60%;
+    margin: 5px 20px;
+    max-width: 40%;
+    margin-left: auto;
   }
   
   .otherMessage {
@@ -29,7 +30,8 @@
     padding: 8px 12px;
     border-radius: 8px;
     margin: 5px 0;
-    max-width: 60%;
+    max-width: 40%;
+    margin-right: auto;
   }
   
   
