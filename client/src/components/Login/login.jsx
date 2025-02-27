@@ -7,14 +7,21 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (username === 'akshit' && password === '1234') {
-      alert('Logged in successfully');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', data.user.username);
       navigate('/whatsapp');
     } else {
-      alert('Invalid credentials');
-    };
+      alert(data.msg || 'Invalid credentials');
+    }
   }
   return (
     <div className={styles.container}>

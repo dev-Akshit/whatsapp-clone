@@ -40,7 +40,9 @@ const Settings = () => {
 
       <div className={styles.logout}>
         <FaSignOutAlt className={styles.logoutIcon} />
-        <span className={styles.logoutText}>Log out</span>
+        <span 
+        className={styles.logoutText} 
+        onClick={localStorage.removeItem('token')} >Log out</span>
       </div>
     </div>
   );

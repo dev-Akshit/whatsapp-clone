@@ -3,6 +3,7 @@ import { FaPen } from "react-icons/fa";
 import styles from "./profile.module.css";
 
 const Profile = () => {
+  const user = JSON.parse(localStorage.getItem('username'));
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profilePicSection}>
