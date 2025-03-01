@@ -1,9 +1,17 @@
-import React from "react";
-import { FaPen } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaPen, FaCheck } from "react-icons/fa";
 import styles from "./profile.module.css";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem('username'));
+  const [userName, setUserName] = useState("Akshit Deshwal");
+  const [userAbout, setUserAbout] = useState(".");
+
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+
+  const handleNameChange = (e) => setUserName(e.target.value);
+  const handleAboutChange = (e) => setUserAbout(e.target.value);
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profilePicSection}>
@@ -12,24 +20,63 @@ const Profile = () => {
           <p className={styles.addPhotoText}>ADD PROFILE PHOTO</p>
         </div>
       </div>
-
+      
       <div className={styles.infoSection}>
         <p className={styles.label}>Your name</p>
         <div className={styles.infoRow}>
-          <span className={styles.userName}>Akshit Deshwal</span>
-          <FaPen className={styles.editIcon} />
+          {isEditingName ? (
+            <input
+              type="text"
+              value={userName}
+              onChange={handleNameChange}
+              className={styles.editInput}
+              autoFocus
+            />
+          ) : (
+            <span className={styles.userName}>{userName}</span>
+          )}
+          {isEditingName ? (
+            <FaCheck
+              className={styles.editIcon}
+              onClick={() => setIsEditingName(false)}
+            />
+          ) : (
+            <FaPen
+              className={styles.editIcon}
+              onClick={() => setIsEditingName(true)}
+            />
+          )}
         </div>
         <p className={styles.description}>
           This is not your username or PIN. This name will be visible to your WhatsApp contacts.
         </p>
       </div>
 
-      {/* About Section */}
       <div className={styles.infoSection}>
         <p className={styles.label}>About</p>
         <div className={styles.infoRow}>
-          <span className={styles.userAbout}>.</span>
-          <FaPen className={styles.editIcon} />
+          {isEditingAbout ? (
+            <input
+              type="text"
+              value={userAbout}
+              onChange={handleAboutChange}
+              className={styles.editInput}
+              autoFocus
+            />
+          ) : (
+            <span className={styles.userAbout}>{userAbout}</span>
+          )}
+          {isEditingAbout ? (
+            <FaCheck
+              className={styles.editIcon}
+              onClick={() => setIsEditingAbout(false)}
+            />
+          ) : (
+            <FaPen
+              className={styles.editIcon}
+              onClick={() => setIsEditingAbout(true)}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -57,7 +57,7 @@
 }
 
 .description {
-    font-size: 12px;
+    font-size: 16px;
     color: #b1b3b5;
     margin-top: 5px;
 }
@@ -70,4 +70,14 @@
 
 .editIcon:hover {
     color: #00a884;
+}
+
+.editInput {
+    width: 90%;
+    font-size: 15px;
+    outline: none;
+    border: none;
+    color: white;
+    background-color: #1e2a30;
+    border-bottom: 1px solid #b1b3b5;
 }

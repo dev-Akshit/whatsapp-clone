@@ -12,6 +12,11 @@ const Settings = () => {
     { id: 6, name: "Help", icon: <FaQuestionCircle /> },
   ];
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";  
+  };
+
   return (
     <div className={styles.settingsContainer}>
       <h2 className={styles.title}>Settings</h2>
@@ -42,7 +47,7 @@ const Settings = () => {
         <FaSignOutAlt className={styles.logoutIcon} />
         <span 
         className={styles.logoutText} 
-        onClick={localStorage.removeItem('token')} >Log out</span>
+        onClick={() => {handleLogout()}} >Log out</span>
       </div>
     </div>
   );

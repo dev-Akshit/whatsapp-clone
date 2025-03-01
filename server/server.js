@@ -3,11 +3,15 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('./models/User');
+const User = require('./src/models/user');
+// const authRoutes = require('./routes/auth.route');
 
 const JWT_SECRET = '_secret_key_';
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// app.use("/api/auth", authRoutes)
+
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -41,19 +45,29 @@ app.post('/signup', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({username})
-    if(!user){
-      return res.status(404).json({msg: 'User does not exist'});
+    const user = await User.findOne({ username })
+    if (!user) {
+      return res.status(404).json({ msg: 'User does not exist' });
     }
     const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch){
-      return res.status(400).json({msg: 'Invalid credentials'});
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid credentials' });
     }
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: {username: user.username, password: user.password} });
+    res.json({ token, user: { username: user.username, password: user.password } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find({}, 'username');
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users', error });
   }
 });
 

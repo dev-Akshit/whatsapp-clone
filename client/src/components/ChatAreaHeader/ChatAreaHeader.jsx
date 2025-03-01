@@ -10,7 +10,7 @@ const ChatAreaHeader = ({ selectedChat }) => {
       <div className={styles.userInfo}>
         <div className={styles.avatar}></div>
         <div className={styles.name}>
-          {selectedChat ? selectedChat.name : "Select a chat"}
+          {selectedChat ? selectedChat.username : "Select a chat"}
         </div>
       </div>
       <div className={styles.icons}>
