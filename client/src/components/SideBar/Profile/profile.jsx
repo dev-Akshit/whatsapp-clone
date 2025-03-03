@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaPen, FaCheck } from "react-icons/fa";
 import styles from "./profile.module.css";
 
 const Profile = () => {
-  const [userName, setUserName] = useState("Akshit Deshwal");
+  const [userName, setUserName] = useState('');
+  
+    useEffect(() => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUserName(storedUser);
+      }
+    }, []);
   const [userAbout, setUserAbout] = useState(".");
 
   const [isEditingName, setIsEditingName] = useState(false);

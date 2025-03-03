@@ -1,8 +1,17 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import styles from "./setting.module.css";
 import { FaUser, FaLock, FaCommentDots, FaBell, FaKeyboard, FaQuestionCircle, FaSignOutAlt, FaSearch } from "react-icons/fa";
 
 const Settings = () => {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUsername(storedUser);
+    }
+  }, []);
+
   const settingsOptions = [
     { id: 1, name: "Account", icon: <FaUser /> },
     { id: 2, name: "Privacy", icon: <FaLock /> },
@@ -29,7 +38,7 @@ const Settings = () => {
       <div className={styles.profileSection}>
         <img src="./defaultPfp.jpg" alt="Profile" className={styles.profileImage} />
         <div className={styles.profileText}>
-          <p className={styles.profileName}>Akshit Deshwal</p>
+          <p className={styles.profileName}>{username}</p>
           <p className={styles.profileStatus}>.</p>
         </div>
       </div>
