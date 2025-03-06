@@ -20,15 +20,17 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route
+      <Route
           path="/"
-          element={isAuthenticated ? <Navigate to="/whatsapp" /> : <Navigate to="/login" />}
-        />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route
-          path="/whatsapp"
           element={isAuthenticated ? <WhatsApp onLogout={handleLogout} /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />}
+        />
+        <Route
+          path="/signup"
+          element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
         />
       </Routes>
     </Router>

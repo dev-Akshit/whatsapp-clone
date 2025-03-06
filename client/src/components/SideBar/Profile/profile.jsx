@@ -1,33 +1,75 @@
 import React, { useState, useEffect } from "react";
-import { FaPen, FaCheck } from "react-icons/fa";
+import { FaPen, FaCheck, FaCamera } from "react-icons/fa";
 import styles from "./profile.module.css";
 
 const Profile = () => {
-  const [userName, setUserName] = useState('');
-  
-    useEffect(() => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUserName(storedUser);
-      }
-    }, []);
+  const [userName, setUserName] = useState("");
   const [userAbout, setUserAbout] = useState(".");
-
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [profilePic, setProfilePic] = useState("");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUserName(storedUser);
+
+    const storedPic = localStorage.getItem("profilePic");
+    if (storedPic) setProfilePic(storedPic);
+  }, []);
 
   const handleNameChange = (e) => setUserName(e.target.value);
   const handleAboutChange = (e) => setUserAbout(e.target.value);
 
+  const handleProfilePicChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profilePic", file);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/users/upload-profile-pic", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await response.json();
+      setProfilePic(data.imageUrl);
+      localStorage.setItem("profilePic", data.imageUrl);
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+    }
+  };
+
+
   return (
     <div className={styles.profileContainer}>
+      {/* Profile Picture Section */}
       <div className={styles.profilePicSection}>
         <div className={styles.profilePic}>
-          <img src="./defaultPfp.jpg" alt="Profile" className={styles.profileImage} />
-          <p className={styles.addPhotoText}>ADD PROFILE PHOTO</p>
+          <img
+            src={profilePic ? `http://localhost:5000${profilePic}` : "./defaultPfp.png"}
+            alt="Profile"
+            className={styles.profilePic}
+          />
+          <label htmlFor="fileInput" className={styles.addPhotoText}>
+            <FaCamera /> ADD PROFILE PHOTO
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            onChange={handleProfilePicChange}
+            style={{ display: "none" }}
+          />
         </div>
       </div>
-      
+
+      {/* Name Section */}
       <div className={styles.infoSection}>
         <p className={styles.label}>Your name</p>
         <div className={styles.infoRow}>
@@ -55,10 +97,12 @@ const Profile = () => {
           )}
         </div>
         <p className={styles.description}>
-          This is not your username or PIN. This name will be visible to your WhatsApp contacts.
+          This is not your username or PIN. This name will be visible to your
+          WhatsApp contacts.
         </p>
       </div>
 
+      {/* About Section */}
       <div className={styles.infoSection}>
         <p className={styles.label}>About</p>
         <div className={styles.infoRow}>

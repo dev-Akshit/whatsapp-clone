@@ -5,15 +5,32 @@ import { FiPlus } from "react-icons/fi";
 import { MdKeyboardVoice } from "react-icons/md";
 import { PiPaperPlaneTiltBold } from "react-icons/pi";
 
-
-const ChatAreaFooter = () => {
+const ChatAreaFooter = ({ onSendMessage }) => {
   const [message, setMessage] = useState("");
+
+  const handleSendMessage = () => {
+  
+    if (message.trim()) {
+      onSendMessage({ message });
+      setMessage(""); 
+    }
+  };
+
+  // Handle Enter key for sending messages
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className={styles.inputArea}>
-      <button className={styles.iconButton}>
+      <label htmlFor="fileInput" className={styles.iconButton}>
         <FiPlus size="28" title="Attach" />
-      </button>
+      </label>
+
+      {/* Message Input */}
       <div className={styles.inputWrapper}>
         <LuSticker size="24" className={styles.stickerIcon} />
         <input
@@ -21,11 +38,18 @@ const ChatAreaFooter = () => {
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
-      <button className={styles.iconButton}>
+
+      {/* Send Button */}
+      <button className={styles.iconButton} onClick={handleSendMessage}>
         {message.trim() ? (
-          <PiPaperPlaneTiltBold size="26" title="Send" className={styles.sendButton} />
+          <PiPaperPlaneTiltBold
+            size="26"
+            title="Send"
+            className={styles.sendButton}
+          />
         ) : (
           <MdKeyboardVoice size="26" title="Voice" />
         )}

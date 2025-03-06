@@ -1,22 +1,52 @@
-import React from "react";
-import styles from "./ChatArea.module.css";
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+import styles from './ChatArea.module.css';
+import ChatInput from '../ChatAreaFooter/ChatAreaFooter';
 
-const messages = [
-  { id: 1, text: "Hello!", sender: "me" },
-  { id: 2, text: "Hey, how are you?", sender: "other" },
-  { id: 3, text: "I'm good! What about you?", sender: "me" },
-];
+const socket = io('http://localhost:5000/');
 
-const ChatArea = () => {
+const ChatArea = ({ chatId, currentUserId }) => {
+  const [messages, setMessages] = useState([]);
+
+  // Join the chat room on mount
+  useEffect(() => {
+    if(chatId){
+      socket.emit('joinChat', {chatId});
+    }
+
+    // Listen for incoming messages
+    socket.on('receiveMessage', (message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off('receiveMessage');
+    };
+  }, [chatId]);
+
+  // Send message
+  const sendMessage = (newMessage) => {
+    if (!newMessage.trim()) return;
+
+    // Emit message to server
+    socket.emit('sendMessage', {
+      chatId,
+      senderId: currentUserId,
+      content: newMessage,
+    });
+  };
+
   return (
     <div className={styles.chatArea}>
       <div className={styles.messages}>
-        {messages.map((msg) => (
-          <div key={msg.id} className={msg.sender === "me" ? styles.myMessage : styles.otherMessage}>
-            {msg.text}
+        {messages.map((msg, index) => (
+          <div key={index} className={msg.sender === currentUserId ? styles.myMessage : styles.otherMessage}>
+            {msg.content}
           </div>
         ))}
       </div>
+
+      <ChatInput onSendMessage={sendMessage} />
     </div>
   );
 };

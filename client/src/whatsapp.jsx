@@ -3,7 +3,7 @@ import Sidebar from "./components/SideBar/SideBar";
 import ChatArea from "./components/ChatArea/ChatArea";
 import ChatAreaHeader from "./components/ChatAreaHeader/ChatAreaHeader";
 import AllChat from "./components/AllChat/AllChat";
-import ChatAreaFooter from "./components/ChatAreaFooter/ChatAreaFooter";
+// import ChatAreaFooter from "./components/ChatAreaFooter/ChatAreaFooter";
 import DefaultPage from "./components/DefaultPage/defaultPage";
 import Status from "./components/SideBar/Status/Status";
 import Community from "./components/SideBar/Community/community";
@@ -39,7 +39,7 @@ function whatsApp() {
           <>
             <ChatAreaHeader selectedChat={selectedChat} />
             <ChatArea selectedChat={selectedChat} />
-            <ChatAreaFooter />
+            {/* <ChatAreaFooter /> */}
           </>
         ) : (
           <DefaultPage />

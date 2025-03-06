@@ -1,42 +1,68 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./AllChat.module.css";
-import Header from '../AllChatHeader/AllChatHeader'
+import Header from "../AllChatHeader/AllChatHeader";
 
-let index = 0;
-const AllChat = ({setSelectedChat}) => {
-
+const AllChat = ({ setSelectedChat }) => {
   const [users, setUsers] = useState([]);
+  const [profilePic, setProfilePic] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [lastMessages, setLastMessages] = useState({});
+  const currUser = localStorage.getItem("user");
 
-
+  // Load User Profile Picture
+  useEffect(() => {
+    const storedPic = localStorage.getItem("profilePic");
+    if (storedPic) {
+      setProfilePic(`http://localhost:5000${storedPic}`);
+    }
+  }, []);
+  // Fetch Users
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('http://localhost:5000/users');
+        const response = await fetch("http://localhost:5000/users");
         const data = await response.json();
-        setUsers(data);
-      } catch (err){
-        console.error('Failed to fetch chats', err);
+        const filteredUsers = data.filter((user) => user !== currUser);
+        setUsers(filteredUsers);
+      } catch (err) {
+        console.error("Failed to fetch chats", err);
       }
-    }
+    };
     fetchChats();
-  }, []);
+  }, [currUser]);
 
-  const filteredChats = users.filter((user) =>
-    user.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Fetch Last Message for Each User
+  // const fetchLastMessage = async (userId) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5000/messages/fetch?user1=${currUser}&user2=${userId}`
+  //     );
+  //     const data = await response.json();
+  //     if (data.length > 0) {
+  //       setLastMessages((prev) => ({
+  //         ...prev,
+  //         [userId]: data[data.length - 1].content,
+  //       }));
+  //     }
+  //   } catch (err) {
+  //     console.error("Failed to fetch last message", err);
+  //   }
+  // };
 
+  // Load Last Messages
+  // useEffect(() => {
+  //   users.forEach((user) => fetchLastMessage(user._id));
+  // }, [users]);
 
   return (
     <div className={styles.chatContainer}>
-
       <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className={styles.chatList}>
-        {filteredChats.length > 0 ? (
-          filteredChats.map(user => (
+        {users.length > 0 ? (
+          users.map((user) => (
             <div
-              key={index++}
+              key={user._id}
               className={styles.chatItem}
               onClick={() => setSelectedChat(user)}
             >
@@ -44,9 +70,10 @@ const AllChat = ({setSelectedChat}) => {
               <div className={styles.chatInfo}>
                 <div className={styles.chatHeader}>
                   <span className={styles.chatName}>{user.username}</span>
-                  {/* <span className={styles.chatTime}>{user.time}</span> */}
                 </div>
-                {/* <p className={styles.chatMessage}>{user.message}</p> */}
+                <p className={styles.chatMessage}>
+                  {lastMessages[user._id] || "Start a conversation..."}
+                </p>
               </div>
             </div>
           ))

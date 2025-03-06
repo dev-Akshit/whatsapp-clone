@@ -1,53 +1,126 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+import bcrypt from 'bcrypt';
+import User from '../models/user.model.js';
+import { generateToken } from '../lib/utils.js'
 
-const JWT_SECRET = '_secret_key_';
-
-
-const signup = async (req, res) => {
+import dotenv from 'dotenv';
+dotenv.config();
+export const signup = async (req, res) => {
+    const { username, email, password } = req.body;
     try {
-        const { username, email, password } = req.body;
+
         if (!username || !email || !password) {
             return res.status(400).json({ msg: 'All fields are required' });
         }
-        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-        const newUser = new User({ username, email, password: hashedPassword });
-
-        await newUser.save();
-        res.status(201).json({ msg: 'User registered successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Server error' });
-    }
-}
-
-const login = async (req, res) => {
-    const { username, password } = req.body;
-    try {
         const user = await User.findOne({ username })
+        if (user) {
+            return res.status(400).json({ msg: 'Username already exists' });
+        }
+        const salt = await genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword
+        })
+
+        if (newUser) {
+            generateToken(newUser._id, res);
+            await newUser.save();
+            res.status(201).json({
+                _id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+                profilePic: newUser.profilePic,
+
+            });
+        } else {
+            res.status(500).json({ msg: 'Invalid user data' });
+        }
+
+
+    } catch (error) {
+        console.log("Error in signu controller", error.msg);
+        res.status(500).json({ msg: 'Internal Server error' });
+    }
+};
+
+export const login = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ msg: 'User does not exist' });
         }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid credentials' });
         }
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1m' });
-        res.json({ token, user: { username: user.username, password: user.password } });
+
+        generateToken(user._id, res);
+
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            profilePic: user.profilePic,
+
+        });
+
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
+        console.error('Error in login controller:', err.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
+    }
+};
+
+export const logout = (req, res) => {
+    try {
+        res.cookie("jwt", "", { maxAge: 0 });
+        return res.status(200).json({ msg: 'Logged out successfully' });
+
+    } catch (err) {
+        console.error('Error in logout controller:', err.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        if (!req.file) {
+            return res.status(400).json({ msg: 'ProfilePic required' });
+        }
+
+        const profilePic = `/uploads/${req.file.filename}`;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profilePic },
+            { new: true }
+        )
+
+        if (!updatedUser) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        res.status(200).json({
+            msg: 'Profile pic uploaded succesfully',
+            user: updatedUser
+        })
+    } catch (err) {
+        console.error('Error in updateProfile controller:', err.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
+    }
+};
+
+export const checkAuth = (req, res) => {
+    try {
+        res.status(200).json(req.user);
+    } catch (err) {
+        console.error('Error in checkAuth controller:', err.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
     }
 }
-
-const user = async (req, res) => {
-    try {
-        const users = await User.find({}, 'username');
-        res.status(200).json(users);
-      } catch (error) {
-        res.status(500).json({ message: 'Error fetching users', error });
-      }
-}
-
-module.exports = { signup, login, user }

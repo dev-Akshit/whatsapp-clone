@@ -1,23 +1,28 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const connectDB = require('./lib/db');
-const authRoutes = require('./routes/auth.route');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/auth.route.js';
+import messageRoutes from './routes/message.route.js';
+// const cors = require('cors');
+// const http = require('http');
+// const { Server } = require('socket.io');
+import dotenv from 'dotenv';
+import connectDB from './lib/db.js';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-}));
+app.use('/uploads', express.static('uploads'));
 
-app.use("/", authRoutes)
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
+
+// Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();

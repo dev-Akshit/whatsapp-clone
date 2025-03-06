@@ -1,14 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./setting.module.css";
 import { FaUser, FaLock, FaCommentDots, FaBell, FaKeyboard, FaQuestionCircle, FaSignOutAlt, FaSearch } from "react-icons/fa";
 
 const Settings = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUserName] = useState("");
+  const [profilePic, setProfilePic] = useState("./defaultPfp.png");
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
+    const storedPfp = localStorage.getItem("profilePic");
+    console.log(storedUser, storedPfp);
+
     if (storedUser) {
-      setUsername(storedUser);
+      setUserName(storedUser);
+      if (profilePic) {
+        setProfilePic(`http://localhost:5000${storedPfp}`);
+      }
     }
   }, []);
 
@@ -23,26 +30,38 @@ const Settings = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";  
+    localStorage.removeItem("user");
+    window.location.href = "/login";
   };
 
   return (
     <div className={styles.settingsContainer}>
       <h2 className={styles.title}>Settings</h2>
 
+      {/* Search Bar */}
       <div className={styles.searchBar}>
         <FaSearch className={styles.searchIcon} />
-        <input type="text" placeholder="Search settings" className={styles.searchInput} />
+        <input
+          type="text"
+          placeholder="Search settings"
+          className={styles.searchInput}
+        />
       </div>
 
+      {/* Profile Section */}
       <div className={styles.profileSection}>
-        <img src="./defaultPfp.jpg" alt="Profile" className={styles.profileImage} />
+        <img
+          src={profilePic}
+          alt="Profile"
+          className={styles.profileImage}
+        />
         <div className={styles.profileText}>
           <p className={styles.profileName}>{username}</p>
           <p className={styles.profileStatus}>.</p>
         </div>
       </div>
 
+      {/* Settings Options */}
       <div className={styles.optionsList}>
         {settingsOptions.map((option) => (
           <div key={option.id} className={styles.optionItem}>
@@ -52,11 +71,12 @@ const Settings = () => {
         ))}
       </div>
 
+      {/* Logout Section */}
       <div className={styles.logout}>
         <FaSignOutAlt className={styles.logoutIcon} />
-        <span 
-        className={styles.logoutText} 
-        onClick={() => {handleLogout()}} >Log out</span>
+        <span className={styles.logoutText} onClick={handleLogout}>
+          Log out
+        </span>
       </div>
     </div>
   );

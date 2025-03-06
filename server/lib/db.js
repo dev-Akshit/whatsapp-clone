@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const connectDB = async () => {
     mongoose.connect('mongodb://localhost:27017/whatsapp-clone')
@@ -7,4 +7,4 @@ const connectDB = async () => {
 
 }
 
-module.exports = connectDB;
+export default connectDB;
