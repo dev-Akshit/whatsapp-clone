@@ -3,20 +3,36 @@ import styles from "./setting.module.css";
 import { FaUser, FaLock, FaCommentDots, FaBell, FaKeyboard, FaQuestionCircle, FaSignOutAlt, FaSearch } from "react-icons/fa";
 
 const Settings = () => {
-  const [username, setUserName] = useState("");
-  const [profilePic, setProfilePic] = useState("./defaultPfp.png");
+  const [user, setUser] = useState({
+    username: "",
+    about: "",
+    profilePic: "",
+  });
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedPfp = localStorage.getItem("profilePic");
-    console.log(storedUser, storedPfp);
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/check", {
+          method: "GET",
+          credentials: "include",
+        });
 
-    if (storedUser) {
-      setUserName(storedUser);
-      if (profilePic) {
-        setProfilePic(`http://localhost:5000${storedPfp}`);
+        if (response.ok) {
+          const userData = await response.json();
+          setUser({
+            username: userData.username,
+            about: userData.about || "Hey there! I am using WhatsApp.",
+            profilePic: userData.profilePic
+              ? `http://localhost:5000/${userData.profilePic}`
+              : "./defaultPfp.png",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
       }
-    }
+    };
+
+    fetchUser();
   }, []);
 
   const settingsOptions = [
@@ -28,10 +44,16 @@ const Settings = () => {
     { id: 6, name: "Help", icon: <FaQuestionCircle /> },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -51,13 +73,13 @@ const Settings = () => {
       {/* Profile Section */}
       <div className={styles.profileSection}>
         <img
-          src={profilePic}
+          src={user.profilePic}
           alt="Profile"
           className={styles.profileImage}
         />
         <div className={styles.profileText}>
-          <p className={styles.profileName}>{username}</p>
-          <p className={styles.profileStatus}>.</p>
+          <p className={styles.profileName}>{user.username}</p>
+          <p className={styles.profileStatus}>{user.about}</p>
         </div>
       </div>
 

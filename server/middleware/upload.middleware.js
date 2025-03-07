@@ -1,15 +1,12 @@
 import multer from 'multer';
 import path from 'path';
 
-// Multer storage configuration
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
+    destination: "./uploads",
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
+      cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+    },
+  });
 
 // File filter to allow only image uploads
 const fileFilter = (req, file, cb) => {

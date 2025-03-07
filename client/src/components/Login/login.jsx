@@ -1,6 +1,7 @@
-import styles from './login.module.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './login.module.css';
+import toast from 'react-hot-toast';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -9,19 +10,17 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/login', {
+    const response = await fetch('http://localhost:5000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
       credentials: 'include'
     });
-    const data = await response.json();
     if (response.ok) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', data.user.username);
       navigate('/');
+      toast.success("Login successful");
     } else {
-      alert(data.msg || 'Invalid credentials');
+      toast.error('Invalid credentials');
     }
   }
   return (

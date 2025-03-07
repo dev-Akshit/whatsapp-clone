@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./components/SideBar/SideBar";
 import ChatArea from "./components/ChatArea/ChatArea";
 import ChatAreaHeader from "./components/ChatAreaHeader/ChatAreaHeader";
@@ -16,6 +16,28 @@ import "./App.css";
 function whatsApp() {
   const [selectedChat, setSelectedChat] = useState(null);
   const [activePanel, setActivePanel] = useState("chats");
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/check", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          setCurrentUser(userData);
+        } else {
+          console.error("User not authenticated");
+        }
+      } catch (error) {
+        console.error("Error fetching user", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
 
   return (
     <div style={{display:"flex"}}>
@@ -38,7 +60,7 @@ function whatsApp() {
         {selectedChat ? (
           <>
             <ChatAreaHeader selectedChat={selectedChat} />
-            <ChatArea selectedChat={selectedChat} />
+            <ChatArea selectedChat={selectedChat} currentUser={currentUser} />
             {/* <ChatAreaFooter /> */}
           </>
         ) : (

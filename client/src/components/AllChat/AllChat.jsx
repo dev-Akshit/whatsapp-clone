@@ -4,32 +4,38 @@ import Header from "../AllChatHeader/AllChatHeader";
 
 const AllChat = ({ setSelectedChat }) => {
   const [users, setUsers] = useState([]);
-  const [profilePic, setProfilePic] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [lastMessages, setLastMessages] = useState({});
-  const currUser = localStorage.getItem("user");
 
   // Load User Profile Picture
-  useEffect(() => {
-    const storedPic = localStorage.getItem("profilePic");
-    if (storedPic) {
-      setProfilePic(`http://localhost:5000${storedPic}`);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedPic = localStorage.getItem("profilePic");
+  //   if (storedPic) {
+  //     setProfilePic(`http://localhost:5000${storedPic}`);
+  //   }
+  // }, []);
   // Fetch Users
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch("http://localhost:5000/users");
+        const response = await fetch("http://localhost:5000/api/message/users", {
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
-        const filteredUsers = data.filter((user) => user !== currUser);
-        setUsers(filteredUsers);
+        setUsers(data);
+
       } catch (err) {
         console.error("Failed to fetch chats", err);
       }
     };
     fetchChats();
-  }, [currUser]);
+  }, []);
+
+  const getImageUrl = (profilePic) => {
+    return profilePic ? `http://localhost:5000/${profilePic}`
+      : "./defaultPfp.png";
+  }
 
   // Fetch Last Message for Each User
   // const fetchLastMessage = async (userId) => {
@@ -66,7 +72,11 @@ const AllChat = ({ setSelectedChat }) => {
               className={styles.chatItem}
               onClick={() => setSelectedChat(user)}
             >
-              <div className={styles.avatar}></div>
+              <img
+                src={getImageUrl(user.profilePic)}
+                alt={user.username}
+                className={styles.avatar}
+              />
               <div className={styles.chatInfo}>
                 <div className={styles.chatHeader}>
                   <span className={styles.chatName}>{user.username}</span>

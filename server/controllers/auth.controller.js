@@ -1,12 +1,12 @@
-import bcrypt from 'bcrypt';
+import bcrypt, { genSalt } from 'bcrypt';
 import User from '../models/user.model.js';
 import { generateToken } from '../lib/utils.js'
 
 import dotenv from 'dotenv';
 dotenv.config();
 export const signup = async (req, res) => {
-    const { username, email, password } = req.body;
     try {
+        const { username, email, password } = req.body;
 
         if (!username || !email || !password) {
             return res.status(400).json({ msg: 'All fields are required' });
@@ -40,7 +40,7 @@ export const signup = async (req, res) => {
 
 
     } catch (error) {
-        console.log("Error in signu controller", error.msg);
+        console.log("Error in signup controller", error.msg);
         res.status(500).json({ msg: 'Internal Server error' });
     }
 };
@@ -89,16 +89,14 @@ export const logout = (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const userId = req.user._id;
-
         if (!req.file) {
             return res.status(400).json({ msg: 'ProfilePic required' });
         }
-
-        const profilePic = `/uploads/${req.file.filename}`;
+        const profilePicPath = req.file.path;
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            { profilePic },
+            { profilePic: profilePicPath },
             { new: true }
         )
 

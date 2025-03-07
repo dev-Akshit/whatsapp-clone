@@ -4,21 +4,42 @@ import styles from "./profile.module.css";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
-  const [userAbout, setUserAbout] = useState(".");
+  const [userAbout, setUserAbout] = useState("Hey there! I am using WhatsApp.");
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [profilePic, setProfilePic] = useState("");
 
+  // Fetch user data on component mount
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUserName(storedUser);
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/check", {
+          method: "GET",
+          credentials: "include",
+        });
 
-    const storedPic = localStorage.getItem("profilePic");
-    if (storedPic) setProfilePic(storedPic);
+        if (response.ok) {
+          const currUser = await response.json();
+          setUserName(currUser.username || "");
+          setUserAbout(currUser.about || "Hey there! I am using WhatsApp.");
+          setProfilePic(currUser.profilePic ? `http://localhost:5000/${currUser.profilePic}` : "./defaultPfp.png");
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  const handleNameChange = (e) => setUserName(e.target.value);
-  const handleAboutChange = (e) => setUserAbout(e.target.value);
+  // Handle name and about updates
+  const handleNameChange = (e) => {
+    setUserName(e.target.value);
+    currUser.username = userName;
+  }
+  const handleAboutChange = (e) => {
+    setUserAbout(e.target.value);
+  }
 
   const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
@@ -28,23 +49,24 @@ const Profile = () => {
     formData.append("profilePic", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/upload-profile-pic", {
+      const response = await fetch("http://localhost:5000/api/auth/update-profile", {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-
       const data = await response.json();
-      setProfilePic(data.imageUrl);
-      localStorage.setItem("profilePic", data.imageUrl);
+      if (response.ok) {
+        alert(data.msg);
+        setProfilePic(`http://localhost:5000/${data.user.profilePic}`);
+      } else {
+        alert("Failed to upload profile picture.");
+      }
     } catch (error) {
       console.error("Error uploading profile picture:", error);
+      alert("Error uploading profile picture.");
     }
   };
-
 
   return (
     <div className={styles.profileContainer}>
@@ -52,9 +74,9 @@ const Profile = () => {
       <div className={styles.profilePicSection}>
         <div className={styles.profilePic}>
           <img
-            src={profilePic ? `http://localhost:5000${profilePic}` : "./defaultPfp.png"}
+            src={profilePic || "./defaultPfp.png"}
             alt="Profile"
-            className={styles.profilePic}
+            className={styles.profileImage}
           />
           <label htmlFor="fileInput" className={styles.addPhotoText}>
             <FaCamera /> ADD PROFILE PHOTO

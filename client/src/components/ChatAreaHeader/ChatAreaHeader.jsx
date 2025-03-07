@@ -5,10 +5,19 @@ import { IoVideocam } from "react-icons/io5";
 
 
 const ChatAreaHeader = ({ selectedChat }) => {
+ 
+  const getImageUrl = (profilePic) => {
+    return profilePic ? `http://localhost:5000/${profilePic}`
+      : "./defaultPfp.png";
+  }
   return (
     <div className={styles.header}>
       <div className={styles.userInfo}>
-        <div className={styles.avatar}></div>
+      <img
+          src={getImageUrl(selectedChat?.profilePic)}
+          alt={selectedChat?.username || "User"}
+          className={styles.avatar}
+        />
         <div className={styles.name}>
           {selectedChat ? selectedChat.username : "Select a chat"}
         </div>

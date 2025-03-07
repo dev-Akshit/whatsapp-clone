@@ -1,6 +1,7 @@
 import styles from './signup.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import toast from "react-hot-toast";
 
 function SignupPage() {
   const [username, setUsername] = useState('');
@@ -10,17 +11,16 @@ function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //api
-    const response = await fetch('http://localhost:5000/signup', {
+    const response = await fetch('http://localhost:5000/api/auth/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ username, email, password }),
     });
-    const data = await response.json();
     if (response.ok) {
-      alert('User registered successfully');
+      toast.success('User registered successfully');
       navigate('/login');
     } else {
-      alert(data.msg || 'Failed to register user');
+      toast.error('Failed to register user');
     }
       
   };

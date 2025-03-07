@@ -9,10 +9,10 @@ const ChatAreaFooter = ({ onSendMessage }) => {
   const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
-  
     if (message.trim()) {
-      onSendMessage({ message });
+      onSendMessage( message );
       setMessage(""); 
+      // console.log( "input msg:",message);
     }
   };
 
@@ -43,12 +43,13 @@ const ChatAreaFooter = ({ onSendMessage }) => {
       </div>
 
       {/* Send Button */}
-      <button className={styles.iconButton} onClick={handleSendMessage}>
+      <button type="submit" className={styles.iconButton} >
         {message.trim() ? (
           <PiPaperPlaneTiltBold
             size="26"
             title="Send"
             className={styles.sendButton}
+            onClick={handleSendMessage}
           />
         ) : (
           <MdKeyboardVoice size="26" title="Voice" />

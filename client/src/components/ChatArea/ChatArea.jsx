@@ -3,45 +3,90 @@ import { io } from 'socket.io-client';
 import styles from './ChatArea.module.css';
 import ChatInput from '../ChatAreaFooter/ChatAreaFooter';
 
-const socket = io('http://localhost:5000/');
-
-const ChatArea = ({ chatId, currentUserId }) => {
+const ChatArea = ({ selectedChat, currentUser }) => {
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null);
 
+  useEffect(() => {
+    console.log("Selected Chat:", selectedChat);
+    console.log("Current User:", currentUser);
+    console.log("Socket:", socket);
+  }, [selectedChat, currentUser, socket]);
+  
+  useEffect(() => {
+    const newSocket = io('http://localhost:5000', {
+      withCredentials: true,
+    });
+    setSocket(newSocket);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, []);
   // Join the chat room on mount
   useEffect(() => {
-    if(chatId){
-      socket.emit('joinChat', {chatId});
+    if (socket && selectedChat && currentUser) {
+      socket.emit('joinRoom', {
+        userId: currentUser?._id,
+        chatId: selectedChat?._id,
+      });
+
+      const fetchMessages = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/message/${currentUser._id}/${selectedChat._id}`, {
+              method: 'GET',
+              credentials: 'include',
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setMessages(data);
+          }
+        } catch (err) {
+          console.error("Failed to fetch messages", err);
+        }
+      }
+      fetchMessages();
     }
+  }, [socket, selectedChat, currentUser]);
 
-    // Listen for incoming messages
-    socket.on('receiveMessage', (message) => {
-      setMessages((prev) => [...prev, message]);
-    });
-
+  useEffect(() => {
+    if (!socket) return;
+    const handleReceiveMessage = (newMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+    }
+    socket.on('receiveMessage', handleReceiveMessage);
     return () => {
-      socket.off('receiveMessage');
+      socket.off('receiveMessage', handleReceiveMessage);
     };
-  }, [chatId]);
+  }, [socket]);
 
   // Send message
-  const sendMessage = (newMessage) => {
-    if (!newMessage.trim()) return;
+  const sendMessage = (messageText) => {
+    if (!messageText.trim() || !socket || !currentUser || !selectedChat) return;    const messageData = {
+      senderId: currentUser._id,
+      receiverId: selectedChat._id,
+      text: messageText,
+    };
+    socket.emit('sendMessage', messageData);
+    setMessages((prev) => [...prev, messageData]);
+    setNewMessage("");
+    console.log("message:", messageData)
 
-    // Emit message to server
-    socket.emit('sendMessage', {
-      chatId,
-      senderId: currentUserId,
-      content: newMessage,
-    });
-  };
+  }
+
+  if (!selectedChat || !currentUser) return <p>Loading chats...</p>
+
 
   return (
     <div className={styles.chatArea}>
       <div className={styles.messages}>
         {messages.map((msg, index) => (
-          <div key={index} className={msg.sender === currentUserId ? styles.myMessage : styles.otherMessage}>
-            {msg.content}
+          <div key={index}
+            className={msg.senderId === currentUser._id ? styles.myMessage : styles.otherMessage}
+          >
+            {msg.text}
           </div>
         ))}
       </div>
