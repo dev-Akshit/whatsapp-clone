@@ -7,13 +7,7 @@ const AllChat = ({ setSelectedChat }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastMessages, setLastMessages] = useState({});
 
-  // Load User Profile Picture
-  // useEffect(() => {
-  //   const storedPic = localStorage.getItem("profilePic");
-  //   if (storedPic) {
-  //     setProfilePic(`http://localhost:5000${storedPic}`);
-  //   }
-  // }, []);
+
   // Fetch Users
   useEffect(() => {
     const fetchChats = async () => {
@@ -41,7 +35,7 @@ const AllChat = ({ setSelectedChat }) => {
   // const fetchLastMessage = async (userId) => {
   //   try {
   //     const response = await fetch(
-  //       `http://localhost:5000/messages/fetch?user1=${currUser}&user2=${userId}`
+  //       `http://localhost:5000/api/message/user1=${currUser}&user2=${userId}`
   //     );
   //     const data = await response.json();
   //     if (data.length > 0) {
@@ -55,7 +49,7 @@ const AllChat = ({ setSelectedChat }) => {
   //   }
   // };
 
-  // Load Last Messages
+  // // Load Last Messages
   // useEffect(() => {
   //   users.forEach((user) => fetchLastMessage(user._id));
   // }, [users]);

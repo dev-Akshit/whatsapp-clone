@@ -3,7 +3,6 @@ import Sidebar from "./components/SideBar/SideBar";
 import ChatArea from "./components/ChatArea/ChatArea";
 import ChatAreaHeader from "./components/ChatAreaHeader/ChatAreaHeader";
 import AllChat from "./components/AllChat/AllChat";
-// import ChatAreaFooter from "./components/ChatAreaFooter/ChatAreaFooter";
 import DefaultPage from "./components/DefaultPage/defaultPage";
 import Status from "./components/SideBar/Status/Status";
 import Community from "./components/SideBar/Community/community";
@@ -13,7 +12,7 @@ import Profile from "./components/SideBar/Profile/profile";
 import Setting from "./components/SideBar/Setting/setting";
 import "./App.css";
 
-function whatsApp() {
+function whatsApp({setIsAuthenticated}) {
   const [selectedChat, setSelectedChat] = useState(null);
   const [activePanel, setActivePanel] = useState("chats");
   const [currentUser, setCurrentUser] = useState(null);
@@ -51,7 +50,7 @@ function whatsApp() {
         {activePanel === "channel" && <Channel />}
         {activePanel === "meta-ai" && <MetaAi />}
         {activePanel === "profile" && <Profile />}
-        {activePanel === "setting" && <Setting />}
+        {activePanel === "setting" && <Setting setIsAuthenticated={setIsAuthenticated} />}
 
       </div>
 

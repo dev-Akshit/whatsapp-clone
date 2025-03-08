@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./setting.module.css";
 import { FaUser, FaLock, FaCommentDots, FaBell, FaKeyboard, FaQuestionCircle, FaSignOutAlt, FaSearch } from "react-icons/fa";
 
-const Settings = () => {
+const Settings = ({setIsAuthenticated}) => {
   const [user, setUser] = useState({
     username: "",
     about: "",
@@ -50,7 +50,7 @@ const Settings = () => {
         method: "POST",
         credentials: "include",
       });
-      window.location.href = "/login";
+      setIsAuthenticated(false);
     } catch (error) {
       console.error("Logout failed:", error);
     }

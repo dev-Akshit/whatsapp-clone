@@ -35,7 +35,7 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
     try {
-        const { senderId, receiverId, text } = req.params;
+        const { senderId, receiverId, text, image } = req.params;
 
         // let imageUrl;
         // if (image) {
@@ -61,3 +61,22 @@ export const sendMessage = async (req, res) => {
     }
 
 }
+
+// export const sendImage = async (req, res) => {
+//     try {
+//         const { senderId, receiverId } = req.body;
+//         const imageUrl = `/uploads/$(req.file.filename)`;
+
+//         const message = new Message({
+//             senderId,
+//             receiverId,
+//             image: imageUrl,
+//             type: 'image',
+//         });
+//         await message.save();
+//         res.status(201).json(message);
+//     } catch (err) {
+//         console.error("Error in sendImage controller:", err);
+//         res.status(500).json({ msg: 'Internal Server Error' });
+//     }
+// }

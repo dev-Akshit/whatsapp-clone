@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 import toast from 'react-hot-toast';
 
-function LoginPage() {
+function LoginPage({setIsAuthenticated}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -17,7 +17,8 @@ function LoginPage() {
       credentials: 'include'
     });
     if (response.ok) {
-      navigate('/');
+      setIsAuthenticated(true);
+      navigate("/");
       toast.success("Login successful");
     } else {
       toast.error('Invalid credentials');

@@ -5,13 +5,14 @@ import { FiPlus } from "react-icons/fi";
 import { MdKeyboardVoice } from "react-icons/md";
 import { PiPaperPlaneTiltBold } from "react-icons/pi";
 
-const ChatAreaFooter = ({ onSendMessage }) => {
+const ChatAreaFooter = ({ onSendMessage, onSendImage }) => {
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState(null);
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      onSendMessage( message );
-      setMessage(""); 
+      onSendMessage(message);
+      setMessage("");
       // console.log( "input msg:",message);
     }
   };
@@ -24,10 +25,28 @@ const ChatAreaFooter = ({ onSendMessage }) => {
     }
   };
 
+  // Handle image upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if(file){
+      setImage(file);
+      onSendImage(file);
+    }
+    // console.log("image:", file);
+    // Send image to server
+  }
+
   return (
     <div className={styles.inputArea}>
       <label htmlFor="fileInput" className={styles.iconButton}>
         <FiPlus size="28" title="Attach" />
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleImageChange}
+        />
       </label>
 
       {/* Message Input */}

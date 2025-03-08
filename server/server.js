@@ -23,6 +23,8 @@ const io = new Server(server, {
   },
 });
 
+// const onlineUsers = new Map();
+
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
@@ -38,37 +40,36 @@ app.use("/api/message", messageRoutes);
 
 // Socket.io
 io.on("connection", (socket) => {
-  console.log(`A user connected: ${socket.id}`);
+  console.log(`User connected: ${socket.id}`);
 
-  socket.on("joinRoom", ({ userId, receiverId }) => {
-    const room = [userId, receiverId].sort().join("-");
-    socket.join(room);
-    console.log(`${userId} joined room: ${room}`);
+  // socket.on("userOnline", (userId) => {
+  //   onlineUsers.set(userId, socket.id);
+  //   io.emit("onlineUsers", Array.from(onlineUsers.key()))
+  //   console.log("User online:", onlineUsers);
+  // })
+
+  socket.on("joinRoom", ({ roomId }) => {
+    socket.join(roomId);
+    console.log(`User joined room: ${roomId}`);
   });
   socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
-    const room = [senderId, receiverId].sort().join("-");
-    io.to(room).emit("receiveMessage", { senderId, text });
-    console.log(`Message sent from ${senderId} to ${receiverId}: ${text}`);
+    const roomId = [senderId, receiverId].sort().join("-");
+    const newMessage = new Message({ senderId, receiverId, text });
 
-    // Save message to database
-    try{
-      const newMessage = new Message({
-        senderId,
-        receiverId,
-        text,
-        // image: imageUrl,
-      });
+    try {
       await newMessage.save();
-    } catch(err){
-      console.error("Error in saving message to database:", err);
-      console.log("Message not saved.");
+      io.to(roomId).emit("receiveMessage", newMessage);
+    } catch (err) {
+      console.error("Error saving message:", err);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log(`A User disconnected: ${socket.id}`);
+    // onlineUsers.delete(socket.id);
+    // io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    console.log(`User disconnected: ${socket.id}`);
   });
-})
+});
 
 
 // Start Server

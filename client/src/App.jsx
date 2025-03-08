@@ -13,6 +13,7 @@ const socket = io("http://localhost:5000/", {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  //check authentication
   useEffect(() => {
     const checkAuth = async (req, res) => {
       try {
@@ -33,6 +34,7 @@ function App() {
     checkAuth();
   }, []);
 
+  // Socket.io connection
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected to socket:", socket.id);
@@ -48,19 +50,6 @@ function App() {
     
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await fetch("http://localhost:5000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      setIsAuthenticated(false);
-      
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
   return (
     <>
     <Toaster position="top-center" reverseOrder={false}/>
@@ -68,11 +57,11 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={isAuthenticated ? <WhatsApp onLogout={handleLogout} /> : <Navigate to="/login" />}
+            element={isAuthenticated ? <WhatsApp setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/login" />}
           />
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+            element={isAuthenticated ? <Navigate to="/" /> : <Login setIsAuthenticated={setIsAuthenticated}/>}
           />
           <Route
             path="/signup"
