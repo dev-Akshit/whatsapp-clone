@@ -23,7 +23,7 @@ const io = new Server(server, {
   },
 });
 
-// const onlineUsers = new Map();
+const onlineUsers = new Map();
 
 app.use(cors({
   origin: "http://localhost:5173",
@@ -33,25 +33,38 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 // Routes
 app.use('/uploads', express.static('uploads'));
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 
+const emitOnlineUsers = () => {
+  io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+}
+
 // Socket.io
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  // socket.on("userOnline", (userId) => {
-  //   onlineUsers.set(userId, socket.id);
-  //   io.emit("onlineUsers", Array.from(onlineUsers.key()))
-  //   console.log("User online:", onlineUsers);
-  // })
+  // Handle user online
+  socket.on("userOnline", (userId) => {
+    if (userId && !onlineUsers.has(userId)) {
+      onlineUsers.set(userId, socket.id);
+      emitOnlineUsers();
+      console.log("User online:", onlineUsers);
+    }
+  });
 
   socket.on("joinRoom", ({ roomId }) => {
     socket.join(roomId);
     console.log(`User joined room: ${roomId}`);
   });
+
   socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
     const roomId = [senderId, receiverId].sort().join("-");
     const newMessage = new Message({ senderId, receiverId, text });
@@ -64,13 +77,31 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Send image message
+  socket.on("sendImage", async ({ senderId, receiverId, imageUrl }) => {
+    const roomId = [senderId, receiverId].sort().join("-");
+    const newMessage = new Message({ senderId, receiverId, image: imageUrl, messageType: "image" });
+
+    try {
+      await newMessage.save();
+      io.to(roomId).emit("receiveMessage", newMessage);
+    } catch (err) {
+      console.error("Error saving image message:", err);
+    }
+  });
+
+  // Handle user disconnect
   socket.on("disconnect", () => {
-    // onlineUsers.delete(socket.id);
-    // io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    for (const [userId, id] of onlineUsers.entries()) {
+      if (id === socket.id) {
+        onlineUsers.delete(userId);
+        break;
+      }
+    }
+    emitOnlineUsers();
     console.log(`User disconnected: ${socket.id}`);
   });
 });
-
 
 // Start Server
 server.listen(PORT, () => {

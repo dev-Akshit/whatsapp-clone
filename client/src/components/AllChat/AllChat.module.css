@@ -61,3 +61,30 @@
     font-size: 16px;
   }
   
+  .chatItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  /* Online Indicator */
+  .onlineIndicator {
+    position: absolute;
+    bottom: 8px;
+    left: 42px;
+    width: 12px;
+    height: 12px;
+    background-color: #4caf50; /* Green for online */
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+  

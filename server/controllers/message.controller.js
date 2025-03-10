@@ -35,12 +35,7 @@ export const getMessages = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
     try {
-        const { senderId, receiverId, text, image } = req.params;
-
-        // let imageUrl;
-        // if (image) {
-        //     imageUrl = `http://localhost:5000/uploads/${image.filename}`;
-        // }
+        const { senderId, receiverId, text } = req.params;
 
         const newMessage = new Message({
             senderId,
@@ -51,8 +46,6 @@ export const sendMessage = async (req, res) => {
 
         await newMessage.save();
 
-        //socket.io here
-
         res.status(201).json(newMessage);
 
     } catch (err) {
@@ -62,21 +55,26 @@ export const sendMessage = async (req, res) => {
 
 }
 
-// export const sendImage = async (req, res) => {
-//     try {
-//         const { senderId, receiverId } = req.body;
-//         const imageUrl = `/uploads/$(req.file.filename)`;
+export const sendImage = async (req, res) => {
+    try {
+        const { senderId, receiverId } = req.body;
+        const imageUrl = `/uploads/${req.file.filename}`;
 
-//         const message = new Message({
-//             senderId,
-//             receiverId,
-//             image: imageUrl,
-//             type: 'image',
-//         });
-//         await message.save();
-//         res.status(201).json(message);
-//     } catch (err) {
-//         console.error("Error in sendImage controller:", err);
-//         res.status(500).json({ msg: 'Internal Server Error' });
-//     }
-// }
+        const newMessage = new Message({
+            senderId,
+            receiverId,
+            image: imageUrl,
+            messageType: 'image',
+        });
+
+        await newMessage.save();
+
+        const roomId = [senderId, receiverId].sort().join("-");
+        req.io.to(roomId).emit('receiveMessage', newMessage);
+
+        res.status(201).json(newMessage);
+    } catch (err) {
+        console.error("Error in sendImage controller:", err);
+        res.status(500).json({ msg: 'Internal Server Error' });
+    }
+};

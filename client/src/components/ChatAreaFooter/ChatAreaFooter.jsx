@@ -7,34 +7,24 @@ import { PiPaperPlaneTiltBold } from "react-icons/pi";
 
 const ChatAreaFooter = ({ onSendMessage, onSendImage }) => {
   const [message, setMessage] = useState("");
-  const [image, setImage] = useState(null);
 
   const handleSendMessage = () => {
-    if (message.trim()) {
-      onSendMessage(message);
-      setMessage("");
-      // console.log( "input msg:",message);
-    }
+    if (!message.trim()) return;
+    onSendMessage(message.trim());
+    setMessage("");
   };
 
-  // Handle Enter key for sending messages
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && message.trim()) {
       e.preventDefault();
       handleSendMessage();
     }
   };
 
-  // Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if(file){
-      setImage(file);
-      onSendImage(file);
-    }
-    // console.log("image:", file);
-    // Send image to server
-  }
+    if (file) onSendImage(file);
+  };
 
   return (
     <div className={styles.inputArea}>
@@ -49,9 +39,8 @@ const ChatAreaFooter = ({ onSendMessage, onSendImage }) => {
         />
       </label>
 
-      {/* Message Input */}
       <div className={styles.inputWrapper}>
-        <LuSticker size="24" className={styles.stickerIcon} />
+        <LuSticker size="24" className={styles.stickerIcon} title="Stickers" />
         <input
           type="text"
           placeholder="Type a message..."
@@ -61,14 +50,16 @@ const ChatAreaFooter = ({ onSendMessage, onSendImage }) => {
         />
       </div>
 
-      {/* Send Button */}
-      <button type="submit" className={styles.iconButton} >
+      <button
+        type="submit"
+        className={styles.iconButton}
+        onClick={message.trim() ? handleSendMessage : null}
+      >
         {message.trim() ? (
           <PiPaperPlaneTiltBold
             size="26"
             title="Send"
             className={styles.sendButton}
-            onClick={handleSendMessage}
           />
         ) : (
           <MdKeyboardVoice size="26" title="Voice" />

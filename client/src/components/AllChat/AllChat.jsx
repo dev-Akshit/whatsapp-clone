@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./AllChat.module.css";
 import Header from "../AllChatHeader/AllChatHeader";
 
-const AllChat = ({ setSelectedChat }) => {
+const AllChat = ({ setSelectedChat, onlineUsers }) => {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [lastMessages, setLastMessages] = useState({});
@@ -73,7 +73,12 @@ const AllChat = ({ setSelectedChat }) => {
               />
               <div className={styles.chatInfo}>
                 <div className={styles.chatHeader}>
-                  <span className={styles.chatName}>{user.username}</span>
+                  <span className={styles.chatName}>
+                    {user.username}
+                    {onlineUsers.includes(user._id) && (
+                      <span className={styles.onlineIndicator}></span>
+                    )}
+                  </span>
                 </div>
                 <p className={styles.chatMessage}>
                   {lastMessages[user._id] || "Start a conversation..."}

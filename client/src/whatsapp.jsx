@@ -12,7 +12,7 @@ import Profile from "./components/SideBar/Profile/profile";
 import Setting from "./components/SideBar/Setting/setting";
 import "./App.css";
 
-function whatsApp({setIsAuthenticated}) {
+function whatsApp({setIsAuthenticated, onlineUsers, socket}) {
   const [selectedChat, setSelectedChat] = useState(null);
   const [activePanel, setActivePanel] = useState("chats");
   const [currentUser, setCurrentUser] = useState(null);
@@ -44,7 +44,7 @@ function whatsApp({setIsAuthenticated}) {
 
       {/* Left Section Show AllChat or Selected Panel */}
       <div style={{ flex: 1 }}>
-        {activePanel === "chats" && <AllChat setSelectedChat={setSelectedChat} />}
+        {activePanel === "chats" && <AllChat setSelectedChat={setSelectedChat} onlineUsers={onlineUsers} />}
         {activePanel === "status" && <Status />}
         {activePanel === "community" && <Community />}
         {activePanel === "channel" && <Channel />}
@@ -54,12 +54,11 @@ function whatsApp({setIsAuthenticated}) {
 
       </div>
 
-      {/* Right Section: Chat Area (only if a chat is selected) */}
       <div>
         {selectedChat ? (
           <>
             <ChatAreaHeader selectedChat={selectedChat} />
-            <ChatArea selectedChat={selectedChat} currentUser={currentUser} />
+            <ChatArea selectedChat={selectedChat} currentUser={currentUser} socket={socket}/>
             {/* <ChatAreaFooter /> */}
           </>
         ) : (
