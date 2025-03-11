@@ -1,48 +1,100 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .inputArea {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    background-color: #202c33;
-  }
-  
-  .iconButton {
-    background: none;
-    border: none;
-    color: rgb(228, 218, 218);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-  }
-  
-  .inputWrapper {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    background-color: #2a3942;
-    padding: 8px 12px;
-    border-radius: 10px;
-    margin: 0 10px;
-  }
-  
-  .stickerIcon {
-    margin-right: 10px;
-    color: rgb(153, 148, 148);
-    cursor: pointer;
-  }
-  
-  .inputWrapper input {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: rgb(228, 218, 218);
-    font-size: 16px;
-  }
-  
-  .sendButton:hover {
-    color: #0aa18b;
-    transition: 0.3s;
-  }
-  
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: #1e2d36;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: rgb(228, 218, 218);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background-color: #2a3942;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+.stickerIcon {
+  margin-right: 10px;
+  color: rgb(153, 148, 148);
+  cursor: pointer;
+}
+
+.inputWrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: rgb(228, 218, 218);
+  font-size: 16px;
+}
+
+.sendButton:hover {
+  color: #0aa18b;
+  transition: 0.3s;
+}
+
+/* Image preview styles */
+.imagePreviewContainer {
+  padding: 5px;
+  background-color: #1e2d36;
+  border-bottom: 1px solid #2a3942;
+}
+
+.imagePreview {
+  position: relative;
+  display: inline-block;
+  max-width: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #2a3942;
+}
+
+.imagePreview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.removeImageBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgb(228, 218, 218);
+  padding: 0;
+}
+
+.removeImageBtn:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: #0aa18b;
+  transition: 0.3s;
+}

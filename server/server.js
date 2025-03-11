@@ -60,33 +60,91 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("joinRoom", ({ roomId }) => {
-    socket.join(roomId);
-    console.log(`User joined room: ${roomId}`);
-  });
-
+  // Send and receive text messages
   socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
-    const roomId = [senderId, receiverId].sort().join("-");
-    const newMessage = new Message({ senderId, receiverId, text });
+    if (!text) return;
+
+    const newMessage = new Message({
+      senderId,
+      receiverId,
+      text,
+      status: 'sent' // Initial status is 'sent'
+    });
 
     try {
-      await newMessage.save();
-      io.to(roomId).emit("receiveMessage", newMessage);
+      const savedMessage = await newMessage.save();
+      const receiverSocketId = onlineUsers.get(receiverId);
+
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("receiveMessage", savedMessage);
+      }
     } catch (err) {
       console.error("Error saving message:", err);
     }
   });
 
-  // Send image message
-  socket.on("sendImage", async ({ senderId, receiverId, imageUrl }) => {
-    const roomId = [senderId, receiverId].sort().join("-");
-    const newMessage = new Message({ senderId, receiverId, image: imageUrl, messageType: "image" });
+  // Send and receive image messages
+  socket.on("sendImage", async (messageData) => {
+    if (messageData.alreadySaved) {
+      const receiverSocketId = onlineUsers.get(messageData.receiverId);
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("receiveMessage", messageData);
+      }
+    } else {
+      const newMessage = new Message({
+        senderId: messageData.senderId,
+        receiverId: messageData.receiverId,
+        image: messageData.image,
+        messageType: "image",
+        status: 'sent'
+      });
+  
+      try {
+        const savedMessage = await newMessage.save();
+        const receiverSocketId = onlineUsers.get(messageData.receiverId);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("receiveMessage", savedMessage);
+        }
+      } catch (err) {
+        console.error("Error saving image message:", err);
+      }
+    }
+  });
 
+  // Mark messages as seen
+  socket.on("markAsSeen", async ({ senderId, receiverId, messageId }) => {
     try {
-      await newMessage.save();
-      io.to(roomId).emit("receiveMessage", newMessage);
+      let query = {
+        senderId: senderId,
+        receiverId: receiverId,
+        status: { $ne: 'seen' }
+      };
+
+      if (messageId) {
+        query._id = messageId;
+      }
+
+      // Update messages in database
+      await Message.updateMany(
+        query,
+        { $set: { status: 'seen' } }
+      );
+
+      // Get IDs of updated messages
+      const messages = await Message.find(query).select('_id');
+      const messageIds = messages.map(msg => msg._id);
+      
+      // Send notification to sender that their messages were seen
+      const senderSocketId = onlineUsers.get(senderId);
+      if (senderSocketId) {
+        io.to(senderSocketId).emit('messageSeen', {
+          messageIds,
+          senderId,
+          receiverId
+        });
+      }
     } catch (err) {
-      console.error("Error saving image message:", err);
+      console.error('Error marking messages as seen:', err);
     }
   });
 

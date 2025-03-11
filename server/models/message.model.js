@@ -22,7 +22,12 @@ const messageSchema = new mongoose.Schema(
             type: String,
             enum: ['text', 'image'],
             default: 'text'
-        }
+        },
+        status: {
+            type: String,
+            enum: ['sent', 'seen'],
+            default: 'sent'
+          }
     },
     { timestamps: true }
 );

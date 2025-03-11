@@ -7,6 +7,9 @@ const AllChat = ({ setSelectedChat, onlineUsers }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [lastMessages, setLastMessages] = useState({});
 
+  const filteredUsers = users.filter(user => {
+    return user.username.toLowerCase().includes(searchQuery.toLowerCase());
+  })
 
   // Fetch Users
   useEffect(() => {
@@ -59,8 +62,8 @@ const AllChat = ({ setSelectedChat, onlineUsers }) => {
       <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className={styles.chatList}>
-        {users.length > 0 ? (
-          users.map((user) => (
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
             <div
               key={user._id}
               className={styles.chatItem}
@@ -87,8 +90,9 @@ const AllChat = ({ setSelectedChat, onlineUsers }) => {
             </div>
           ))
         ) : (
-          <p className={styles.noChats}>No chats found</p>
-        )}
+          <p className={styles.noChats}>
+            {users.length > 0 ? "No matching chats found" : "No chats found"}
+          </p>)}
       </div>
     </div>
   );

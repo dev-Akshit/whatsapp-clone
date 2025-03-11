@@ -75,3 +75,37 @@
   padding: 5px 10px;
   cursor: pointer;
 }
+
+/* Add these styles to your existing ChatArea.module.css */
+
+.messageContent {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 5px;
+  font-size: 12px;
+  color: #8696a0;
+}
+
+.seen {
+  color: #0aa18b;
+}
+
+.tick {
+  width: 14px;
+  height: 14px;
+}
+
+.status .tick:last-child {
+  margin-left: -8px;
+}
+
+.myMessage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}

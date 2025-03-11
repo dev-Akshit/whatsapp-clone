@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./ChatArea.module.css";
 import ChatInput from "../ChatAreaFooter/ChatAreaFooter";
+import { FiCheck } from "react-icons/fi";
 
 const ChatArea = ({ selectedChat, currentUser, socket }) => {
   const [messages, setMessages] = useState([]);
@@ -9,10 +10,6 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
   // Join room and fetch chat history
   useEffect(() => {
     if (!socket || !selectedChat || !currentUser) return;
-
-    const roomId = [currentUser._id, selectedChat._id].sort().join("-");
-    socket.emit("joinRoom", { roomId });
-    console.log("Joined room:", roomId);
 
     const fetchMessages = async () => {
       try {
@@ -28,15 +25,16 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
           setMessages(data);
         }
       } catch (err) {
-        console.error(" Failed to fetch messages:", err);
+        console.error("Failed to fetch messages:", err);
       }
     };
 
     fetchMessages();
 
-    return () => {
-      socket.off("joinRoom");
-    };
+    socket.emit('markAsSeen', {
+      senderId: selectedChat._id,
+      receiverId: currentUser._id
+    });
   }, [socket, selectedChat, currentUser]);
 
   // Send text message
@@ -47,9 +45,11 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
       senderId: currentUser._id,
       receiverId: selectedChat._id,
       text: messageText,
+      status: 'sent', // Initial status
+      timestamp: new Date().toISOString()
     };
 
-    // Add locally only for sender
+    // Add locally for sender
     setMessages((prev) => [...prev, messageData]);
 
     // Emit to server
@@ -62,20 +62,52 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
 
     const handleReceiveMessage = (newMessage) => {
       console.log("New message received:", newMessage);
+
+      if (newMessage.senderId === selectedChat?._id) {
+        socket.emit('markAsSeen', {
+          senderId: newMessage.senderId,
+          receiverId: currentUser._id,
+          messageId: newMessage._id
+        });
+      }
+
       setMessages((prev) => [...prev, newMessage]);
+    };
+
+    const handleMessageSeen = ({ messageIds, senderId, receiverId }) => {
+      // Update seen status for messages
+      if (senderId === currentUser._id) {
+        setMessages(prev =>
+          prev.map(msg =>
+            messageIds.includes(msg._id) ||
+              (msg.senderId === senderId && msg.receiverId === receiverId && !msg.seen)
+              ? { ...msg, status: 'seen' }
+              : msg
+          )
+        );
+      }
     };
 
     socket.off('receiveMessage');
     socket.on('receiveMessage', handleReceiveMessage);
 
+    socket.off('messageSeen');
+    socket.on('messageSeen', handleMessageSeen);
+
     return () => {
       socket.off('receiveMessage', handleReceiveMessage);
+      socket.off('messageSeen', handleMessageSeen);
     };
-  }, [socket]);
+  }, [socket, currentUser, selectedChat]);
 
-  useEffect(() => { 
+  useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView(
+        {
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
     }
   }, [messages])
 
@@ -83,18 +115,11 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
   const sendImage = async (imageFile) => {
     if (!imageFile || !socket || !currentUser || !selectedChat) return;
 
-    const imagePreview = URL.createObjectURL(imageFile);
-    const tempMessage = {
-      senderId: currentUser._id,
-      receiverId: selectedChat._id,
-      image: imagePreview,
-    };
-    setMessages((prev) => [...prev, tempMessage]);
-
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("senderId", currentUser._id);
     formData.append("receiverId", selectedChat._id);
+    formData.append("status", "sent");
 
     try {
       const response = await fetch("http://localhost:5000/api/message/image", {
@@ -105,12 +130,34 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
 
       if (response.ok) {
         const newImageMessage = await response.json();
-        socket.emit("sendImage", newImageMessage);
+
+        setMessages((prev) => [...prev, newImageMessage]);
+        socket.emit("sendImage", {...newImageMessage, alreadySaved: true});
       } else {
         console.error("Image upload failed");
       }
     } catch (err) {
       console.error("Error sending image:", err);
+    }
+  };
+
+  // Render message status 
+  const renderMessageStatus = (message) => {
+    if (message.senderId !== currentUser._id) return null;
+
+    if (message.status === 'seen') {
+      return (
+        <span className={`${styles.status} ${styles.seen}`}>
+          <FiCheck className={styles.tick} />
+          <FiCheck className={styles.tick} />
+        </span>
+      );
+    } else {
+      return (
+        <span className={styles.status}>
+          <FiCheck className={styles.tick} />
+        </span>
+      );
     }
   };
 
@@ -128,18 +175,18 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
                 : styles.otherMessage
             }
           >
-            {msg.text && <>{msg.text}</>}
-            {msg.image && (
-              <img
-                src={`http://localhost:5000${msg.image}`}
-                alt="Sent Image"
-                className={styles.chatImage}
-              />
-            )}
+            <div className={styles.messageContent}>
+              {msg.text && <>{msg.text}</>}
+              {msg.image && (
+                <img
+                  src={`http://localhost:5000${msg.image}`}
+                  alt="Sent Image"
+                  className={styles.chatImage}
+                />
+              )}
+            </div>
 
-            {/* {msg.senderId === currentUser._id && (
-              <span className={styles.status}>✔✔</span>
-            )} */}
+            {renderMessageStatus(msg)}
           </div>
         ))}
         <div ref={messagesEndRef} />
