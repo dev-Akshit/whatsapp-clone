@@ -47,12 +47,14 @@
     border-radius: 10px;
     background-color: #2a3942;
     color: #ffffff;
+    z-index: 1;
   }
 
 .chatItem {
   display: flex;
   align-items: center;
   padding: 10px;
+  cursor: pointer;
 }
 
 .chatItem:hover {
@@ -81,6 +83,7 @@
   border-radius: 10px;
   background-color: #2a3942;
   color: #ffffff;
+  z-index: 1;
 }
 
 .menuItem {
@@ -89,6 +92,7 @@
   margin-left: 15px;
   gap: 10px;
   font-size: 16px;
+  cursor: pointer;
 }
 
 .menuIcon {

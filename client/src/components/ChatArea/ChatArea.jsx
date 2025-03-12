@@ -55,7 +55,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
     // Emit to server
     socket.emit('sendMessage', messageData);
   };
-
+  
   // Receive messages
   useEffect(() => {
     if (!socket) return;
@@ -76,11 +76,11 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
 
     const handleMessageSeen = ({ messageIds, senderId, receiverId }) => {
       // Update seen status for messages
-      if (senderId === currentUser._id) {
+      if (senderId === currentUser._id ) {
         setMessages(prev =>
           prev.map(msg =>
             messageIds.includes(msg._id) ||
-              (msg.senderId === senderId && msg.receiverId === receiverId && !msg.seen)
+              (msg.senderId === senderId && msg.receiverId === receiverId && msg.status !== 'seen')
               ? { ...msg, status: 'seen' }
               : msg
           )
@@ -155,7 +155,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
     } else {
       return (
         <span className={styles.status}>
-          <FiCheck className={styles.tick} />
+          <FiCheck className={styles.tickOne} />
         </span>
       );
     }

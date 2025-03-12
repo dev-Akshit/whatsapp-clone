@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./AllChat.module.css";
 import Header from "../AllChatHeader/AllChatHeader";
 
-const AllChat = ({ setSelectedChat, onlineUsers }) => {
+const AllChat = ({ setSelectedChat, onlineUsers, setIsAuthenticated }) => {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [lastMessages, setLastMessages] = useState({});
 
   const filteredUsers = users.filter(user => {
     return user.username.toLowerCase().includes(searchQuery.toLowerCase());
@@ -34,32 +33,9 @@ const AllChat = ({ setSelectedChat, onlineUsers }) => {
       : "./defaultPfp.png";
   }
 
-  // Fetch Last Message for Each User
-  // const fetchLastMessage = async (userId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:5000/api/message/user1=${currUser}&user2=${userId}`
-  //     );
-  //     const data = await response.json();
-  //     if (data.length > 0) {
-  //       setLastMessages((prev) => ({
-  //         ...prev,
-  //         [userId]: data[data.length - 1].content,
-  //       }));
-  //     }
-  //   } catch (err) {
-  //     console.error("Failed to fetch last message", err);
-  //   }
-  // };
-
-  // // Load Last Messages
-  // useEffect(() => {
-  //   users.forEach((user) => fetchLastMessage(user._id));
-  // }, [users]);
-
   return (
     <div className={styles.chatContainer}>
-      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} setIsAuthenticated={setIsAuthenticated}/>
 
       <div className={styles.chatList}>
         {filteredUsers.length > 0 ? (
@@ -84,7 +60,7 @@ const AllChat = ({ setSelectedChat, onlineUsers }) => {
                   </span>
                 </div>
                 <p className={styles.chatMessage}>
-                  {lastMessages[user._id] || "Start a conversation..."}
+                  Start a conversation...
                 </p>
               </div>
             </div>

@@ -24,6 +24,8 @@
   max-width: fit-content;
   word-break: break-all;
   margin-left: auto;
+  position: relative;
+  border-bottom-right-radius: 3px; /* Adjust corner for tail placement */
 }
 
 .otherMessage {
@@ -36,6 +38,32 @@
   max-width: fit-content;
   word-break: break-all;
   margin-right: auto;
+  position: relative;
+  border-bottom-left-radius: 3px; /* Adjust corner for tail placement */
+}
+
+/* Sender message tail */
+.myMessage::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  width: 14px;
+  height: 14px;
+  background-color: #005c4b;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+/* Receiver message tail */
+.otherMessage::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -8px;
+  width: 14px;
+  height: 14px;
+  background-color: #202c33;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
 }
 
 .chatImage {
@@ -76,11 +104,11 @@
   cursor: pointer;
 }
 
-/* Add these styles to your existing ChatArea.module.css */
-
 .messageContent {
   display: inline-block;
   max-width: 100%;
+  position: relative;
+  z-index: 1; /* Ensure message content appears above the tail */
 }
 
 .status {
@@ -89,10 +117,11 @@
   margin-left: 5px;
   font-size: 12px;
   color: #8696a0;
+  z-index: 1; /* Ensure status appears above the tail */
 }
 
 .seen {
-  color: #0aa18b;
+  color: #008cff;
 }
 
 .tick {
@@ -100,8 +129,13 @@
   height: 14px;
 }
 
+.tickOne {
+  width: 14px;
+  height: 14px;
+}
+
 .status .tick:last-child {
-  margin-left: -8px;
+  margin-left: -9px;
 }
 
 .myMessage {

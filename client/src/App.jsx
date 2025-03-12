@@ -9,7 +9,6 @@ import WhatsApp from "./whatsapp";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [userId, setUserId] = useState("");
   const [socket, setSocket] = useState(null);
 
   // Initialize socket connection once
@@ -30,7 +29,6 @@ function App() {
         if (response.ok) {
           const userData = await response.json();
           setIsAuthenticated(true);
-          setUserId(userData._id);
           if(socket) socket.emit("userOnline", userData._id);
         } else {
           setIsAuthenticated(false);

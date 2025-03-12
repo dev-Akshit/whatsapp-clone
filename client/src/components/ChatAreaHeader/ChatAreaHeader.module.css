@@ -9,7 +9,7 @@
     border-bottom: 1px solid #2a3942;
     overflow: hidden;
   }
-  
+
   .userInfo {
     display: flex;
     align-items: center;
@@ -26,6 +26,19 @@
   .name {
     font-size: 16px;
     font-weight: bold;
+  }
+
+  .status {
+    font-size: 13px;
+    margin-top: 2px;
+  }
+  
+  .online {
+    color: #5acf6d;
+  }
+  
+  .offline {
+    color: #9e9e9e;
   }
   
   .icons {

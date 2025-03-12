@@ -44,7 +44,7 @@ function whatsApp({setIsAuthenticated, onlineUsers, socket}) {
 
       {/* Left Section Show AllChat or Selected Panel */}
       <div style={{ flex: 1 }}>
-        {activePanel === "chats" && <AllChat setSelectedChat={setSelectedChat} onlineUsers={onlineUsers} />}
+        {activePanel === "chats" && <AllChat setSelectedChat={setSelectedChat} onlineUsers={onlineUsers} setIsAuthenticated={setIsAuthenticated} />}
         {activePanel === "status" && <Status />}
         {activePanel === "community" && <Community />}
         {activePanel === "channel" && <Channel />}
@@ -57,7 +57,7 @@ function whatsApp({setIsAuthenticated, onlineUsers, socket}) {
       <div>
         {selectedChat ? (
           <>
-            <ChatAreaHeader selectedChat={selectedChat} />
+            <ChatAreaHeader selectedChat={selectedChat} onlineUsers={onlineUsers} />
             <ChatArea selectedChat={selectedChat} currentUser={currentUser} socket={socket}/>
             {/* <ChatAreaFooter /> */}
           </>
