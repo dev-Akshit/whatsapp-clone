@@ -1,6 +1,8 @@
 import bcrypt, { genSalt } from 'bcrypt';
 import User from '../models/user.model.js';
 import { generateToken } from '../lib/utils.js'
+import crypto from 'crypto';
+import { sendEmail } from '../lib/sendEmail.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -119,6 +121,71 @@ export const checkAuth = (req, res) => {
         res.status(200).json(req.user);
     } catch (err) {
         console.error('Error in checkAuth controller:', err.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
+    }
+}
+
+export const forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+        // Generate a random token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        //set token expiration
+        user.resetToken = resetToken;
+        user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
+        await user.save();
+
+        //create reset URL
+        const resetUrl = `localhost:5173/reset-password/${resetToken}`;
+
+        //email content
+        const message = `
+            Hi ${user.username},
+            You requested a password reset for your WhatsApp Clone account. 
+            Please click the link below to reset your password:
+      
+            ${resetUrl}
+      
+            This link will expire in 1 hours.
+      
+            If you didn't request this, please ignore this email.
+            `;
+        await sendEmail({
+            email: user.email,
+            subject: 'Password Reset Request',
+            message: message
+        });
+        res.status(200).json({ msg: 'Reset password email sent successfully' });
+    } catch (error) {
+        console.error('Error in forgetPassword controller:', error.msg);
+        return res.status(500).json({ msg: 'Internal Server error' });
+    }
+}
+
+export const resetPassword = async (req, res) => {
+    try {
+        const { token, password } = req.body;
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiration: { $gt: Date.now() }
+        });
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found or token expired' });
+        }
+        //update password
+        user.password = await bcrypt.hash(password, 12);
+        user.resetToken = null;
+        user.resetTokenExpiration = null;
+        await user.save();
+        // generateToken(user._id, res);
+        res.status(200).json({ msg: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Error in resetPassword controller:', error.msg);
         return res.status(500).json({ msg: 'Internal Server error' });
     }
 }

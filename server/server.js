@@ -23,8 +23,6 @@ const io = new Server(server, {
   },
 });
 
-const onlineUsers = new Map();
-
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
@@ -43,21 +41,24 @@ app.use('/uploads', express.static('uploads'));
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
 
-const emitOnlineUsers = () => {
-  io.emit("onlineUsers", Array.from(onlineUsers.keys()));
-}
-
 // Socket.io
+const onlineUsers = new Map();
+
+const emitOnlineUsers = () => {
+  console.log("Emitting online users:", Array.from(onlineUsers.keys()));
+  io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+};
+
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
 
   // Handle user online
   socket.on("userOnline", (userId) => {
-    if (userId && !onlineUsers.has(userId)) {
-      onlineUsers.set(userId, socket.id);
-      emitOnlineUsers();
-      console.log("User online:", onlineUsers);
-    }
+    if (!userId) return;
+    
+    onlineUsers.set(userId, socket.id);
+    
+    emitOnlineUsers();
   });
 
   // Send and receive text messages
@@ -124,40 +125,62 @@ io.on("connection", (socket) => {
         query._id = messageId;
       }
 
-      // Update messages in database
-      await Message.updateMany(
+      const updateResult = await Message.updateMany(
         query,
         { $set: { status: 'seen' } }
       );
 
-      // Get IDs of updated messages
-      const messages = await Message.find(query).select('_id');
-      const messageIds = messages.map(msg => msg._id);
-      
-      // Send notification to sender that their messages were seen
-      const senderSocketId = onlineUsers.get(senderId);
-      if (senderSocketId) {
-        io.to(senderSocketId).emit('messageSeen', {
-          messageIds,
-          senderId,
-          receiverId
-        });
+      // Only proceed if messages were actually updated
+      if (updateResult.modifiedCount > 0) {
+        const messages = await Message.find({
+          ...query,
+          status: 'seen'
+        }).select('_id');
+        
+        const messageIds = messages.map(msg => msg._id);
+        
+        // Send notification to sender that their messages were seen
+        const senderSocketId = onlineUsers.get(senderId);
+        if (senderSocketId) {
+          io.to(senderSocketId).emit('messageSeen', {
+            messageIds,
+            senderId,
+            receiverId
+          });
+        }
       }
     } catch (err) {
       console.error('Error marking messages as seen:', err);
     }
   });
 
+  // socket.on("logout", (userId) => {
+  //   if (userId && onlineUsers.has(userId)) {
+  //     console.log(`User ${userId} logged out manually`);
+  //     onlineUsers.delete(userId);
+  //     emitOnlineUsers();
+  //   }
+  // });
+
   // Handle user disconnect
   socket.on("disconnect", () => {
+    let disconnectedUserId = null;
+    
+    // Find which user this socket belonged to
     for (const [userId, id] of onlineUsers.entries()) {
       if (id === socket.id) {
+        disconnectedUserId = userId;
         onlineUsers.delete(userId);
         break;
       }
     }
-    emitOnlineUsers();
-    console.log(`User disconnected: ${socket.id}`);
+    
+    if (disconnectedUserId) {
+      console.log(`User ${disconnectedUserId} disconnected (socket: ${socket.id})`);
+      emitOnlineUsers();
+    } else {
+      console.log(`Unknown user disconnected: ${socket.id}`);
+    }
   });
 });
 

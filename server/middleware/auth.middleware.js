@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const JWT_SECRET = "secretkey";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const protectRoute = async (req, res, next) => {
     try {
