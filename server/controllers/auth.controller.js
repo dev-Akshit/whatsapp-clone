@@ -177,7 +177,7 @@ export const resetPassword = async (req, res) => {
             return res.status(404).json({ msg: 'User not found or token expired' });
         }
         //update password
-        user.password = password;
+        user.password = await bcrypt.hash(password, 12);
         user.resetToken = null;
         user.resetTokenExpiration = null;
         await user.save();
