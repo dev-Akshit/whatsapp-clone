@@ -10,7 +10,7 @@ const ChatAreaHeader = ({ selectedChat, onlineUsers }) => {
   }
   // Check if the selected user is online
   const isUserOnline = selectedChat && onlineUsers?.includes(selectedChat._id);
-  console.log(selectedChat._id);
+  // console.log(selectedChat._id);
   return (
     <div className={styles.header}>
       <div className={styles.userInfo}>

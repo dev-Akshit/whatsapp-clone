@@ -140,10 +140,9 @@ export const forgetPassword = async (req, res) => {
         user.resetTokenExpiration = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        //create reset URL
-        const resetUrl = `localhost:5173/reset-password/${resetToken}`;
+        const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+        // console.log(process.env.CLIENT_URL);
 
-        //email content
         const message = `
             Hi ${user.username},
             You requested a password reset for your WhatsApp Clone account. 
@@ -178,7 +177,7 @@ export const resetPassword = async (req, res) => {
             return res.status(404).json({ msg: 'User not found or token expired' });
         }
         //update password
-        user.password = await bcrypt.hash(password, 12);
+        user.password = password;
         user.resetToken = null;
         user.resetTokenExpiration = null;
         await user.save();
