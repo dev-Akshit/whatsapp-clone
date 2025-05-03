@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 export const getUsersForSideBar = async (req, res) => {
     try {
@@ -57,24 +58,44 @@ export const sendMessage = async (req, res) => {
 
 export const sendImage = async (req, res) => {
     try {
-        const { senderId, receiverId } = req.body;
-        const imageUrl = `/uploads/${req.file.filename}`;
-
-        const newMessage = new Message({
-            senderId,
-            receiverId,
-            image: imageUrl,
-            messageType: 'image',
-        });
-
-        await newMessage.save();
-
-        const roomId = [senderId, receiverId].sort().join("-");
-        req.io.to(roomId).emit('receiveMessage', newMessage);
-
-        res.status(201).json(newMessage);
+      const { senderId, receiverId } = req.body;
+  
+      if (!req.file) {
+        console.error('No image file provided in request');
+        return res.status(400).json({ msg: 'No image file provided' });
+      }
+  
+      console.log('Uploading image to Cloudinary...');
+      const result = await cloudinary.uploader.upload_stream(
+        { folder: 'whatsapp_clone' },
+        (error, result) => {
+          if (error) {
+            console.error('Cloudinary upload error:', error);
+            throw new Error('Cloudinary upload failed');
+          }
+          return result;
+        }
+      ).end(req.file.buffer);
+  
+      console.log('Cloudinary upload result:', result);
+  
+      const newMessage = new Message({
+        senderId,
+        receiverId,
+        image: result.secure_url,
+        messageType: 'image',
+        status: 'sent',
+      });
+  
+      await newMessage.save();
+      console.log('Saved message:', newMessage);
+  
+      const roomId = [senderId, receiverId].sort().join('-');
+      req.io.to(roomId).emit('receiveMessage', newMessage);
+  
+      res.status(201).json(newMessage);
     } catch (err) {
-        console.error("Error in sendImage controller:", err);
-        res.status(500).json({ msg: 'Internal Server Error' });
+      console.error('Error in sendImage controller:', err);
+      res.status(500).json({ msg: 'Internal Server Error' });
     }
-};
+  };

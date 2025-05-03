@@ -15,7 +15,7 @@ function App() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(`${import.meta.env.VITE_SOCKET_URL}`, {
       withCredentials: true
     });
     setSocket(newSocket);
@@ -27,7 +27,7 @@ function App() {
 
   const checkAuth = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/check", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
         method: "GET",
         credentials: "include",
       });
@@ -55,7 +55,7 @@ function App() {
     if (!socket) return;
 
     const handleOnlineUsers = (users) => {
-      console.log("Online users updated:", users);
+      // console.log("Online users updated:", users);
       setOnlineUsers(users);
     };
 
@@ -73,7 +73,7 @@ function App() {
     const setupUserOnline = async () => {
       const user = await checkAuth();
       if (user && user._id) {
-        console.log("Emitting userOnline with ID:", user._id);
+        // console.log("Emitting userOnline with ID:", user._id);
         socket.emit("userOnline", user._id);
       }
     };

@@ -5,7 +5,7 @@ import { IoVideocam } from "react-icons/io5";
 
 const ChatAreaHeader = ({ selectedChat, onlineUsers }) => {
   const getImageUrl = (profilePic) => {
-    return profilePic ? `http://localhost:5000/${profilePic}`
+    return profilePic ? `${import.meta.env.VITE_API_URL}/${profilePic}`
       : "./defaultPfp.png";
   }
   // Check if the selected user is online

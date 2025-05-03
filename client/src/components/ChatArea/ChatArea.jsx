@@ -14,7 +14,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/message/${currentUser._id}/${selectedChat._id}`,
+          `${import.meta.env.VITE_API_URL}/api/message/${currentUser._id}/${selectedChat._id}`,
           {
             method: 'GET',
             credentials: 'include',
@@ -61,7 +61,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
     if (!socket) return;
 
     const handleReceiveMessage = (newMessage) => {
-      console.log("New message received:", newMessage);
+      // console.log("New message received:", newMessage);
 
       if (newMessage.senderId === selectedChat?._id) {
         socket.emit('markAsSeen', {
@@ -114,27 +114,30 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
   // Send image message
   const sendImage = async (imageFile) => {
     if (!imageFile || !socket || !currentUser || !selectedChat) return;
-
+  
+    console.log('Sending image file:', imageFile);
+  
     const formData = new FormData();
     formData.append("image", imageFile);
     formData.append("senderId", currentUser._id);
     formData.append("receiverId", selectedChat._id);
     formData.append("status", "sent");
-
+  
     try {
-      const response = await fetch("http://localhost:5000/api/message/image", {
+      console.log('Sending image to:', `${import.meta.env.VITE_API_URL}/api/message/image`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/image`, {
         method: "POST",
         credentials: "include",
         body: formData,
       });
-
+  
       if (response.ok) {
         const newImageMessage = await response.json();
-
+        console.log('Received image message:', newImageMessage);
         setMessages((prev) => [...prev, newImageMessage]);
-        socket.emit("sendImage", {...newImageMessage, alreadySaved: true});
+        socket.emit("sendImage", { ...newImageMessage, alreadySaved: true });
       } else {
-        console.error("Image upload failed");
+        console.error("Image upload failed:", response.status, response.statusText);
       }
     } catch (err) {
       console.error("Error sending image:", err);
@@ -179,7 +182,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
               {msg.text && <>{msg.text}</>}
               {msg.image && (
                 <img
-                  src={`http://localhost:5000${msg.image}`}
+                  src={msg.image}
                   alt="Sent Image"
                   className={styles.chatImage}
                 />

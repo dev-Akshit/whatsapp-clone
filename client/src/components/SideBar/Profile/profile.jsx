@@ -13,7 +13,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/auth/check", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
           method: "GET",
           credentials: "include",
         });
@@ -22,7 +22,7 @@ const Profile = () => {
           const currUser = await response.json();
           setUserName(currUser.username || "");
           setUserAbout(currUser.about || "Hey there! I am using WhatsApp.");
-          setProfilePic(currUser.profilePic ? `http://localhost:5000/${currUser.profilePic}` : "./defaultPfp.png");
+          setProfilePic(currUser.profilePic ? `${import.meta.env.VITE_API_URL}/${currUser.profilePic}` : "./defaultPfp.png");
         }
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -49,7 +49,7 @@ const Profile = () => {
     formData.append("profilePic", file);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/update-profile", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/update-profile`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -58,7 +58,7 @@ const Profile = () => {
       const data = await response.json();
       if (response.ok) {
         alert(data.msg);
-        setProfilePic(`http://localhost:5000/${data.user.profilePic}`);
+        setProfilePic(`${import.meta.env.VITE_API_URL}/${data.user.profilePic}`);
       } else {
         alert("Failed to upload profile picture.");
       }

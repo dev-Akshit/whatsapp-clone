@@ -13,7 +13,7 @@ function LoginPage({ setIsAuthenticated }) {
     e.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -28,11 +28,11 @@ function LoginPage({ setIsAuthenticated }) {
         setIsAuthenticated(true);
         
         // Connect to socket and emit userOnline event
-        const socket = io("http://localhost:5000", { withCredentials: true });
+        const socket = io(`${import.meta.env.VITE_SOCKET_URL}`, { withCredentials: true });
         
         if (userData && userData._id) {
           socket.emit("userOnline", userData._id);
-          console.log("Emitted userOnline with ID:", userData._id);
+          // console.log("Emitted userOnline with ID:", userData._id);
         }
         
         navigate("/");

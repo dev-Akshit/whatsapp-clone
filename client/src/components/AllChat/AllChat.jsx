@@ -14,7 +14,7 @@ const AllChat = ({ setSelectedChat, onlineUsers, setIsAuthenticated }) => {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/message/users", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/users`, {
           credentials: 'include',
         });
         if (!response.ok) throw new Error("Failed to fetch users");
@@ -29,7 +29,7 @@ const AllChat = ({ setSelectedChat, onlineUsers, setIsAuthenticated }) => {
   }, []);
 
   const getImageUrl = (profilePic) => {
-    return profilePic ? `http://localhost:5000/${profilePic}`
+    return profilePic ? `${import.meta.env.VITE_API_URL}/${profilePic}`
       : "./defaultPfp.png";
   }
 

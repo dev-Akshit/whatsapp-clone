@@ -23,7 +23,8 @@ function WhatsApp({ setIsAuthenticated, onlineUsers, socket, userData, handleLog
     } else {
       const fetchUser = async () => {
         try {
-          const response = await fetch("http://localhost:5000/api/auth/check", {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
+            method: "GET",
             credentials: "include",
           });
           if (response.ok) {
@@ -47,7 +48,7 @@ function WhatsApp({ setIsAuthenticated, onlineUsers, socket, userData, handleLog
 
   const onLogout = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/logout", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
         method: "POST", 
         credentials: "include",
       });

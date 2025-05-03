@@ -12,7 +12,7 @@ const Settings = ({setIsAuthenticated}) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/auth/check", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/check`, {
           method: "GET",
           credentials: "include",
         });
@@ -23,7 +23,7 @@ const Settings = ({setIsAuthenticated}) => {
             username: userData.username,
             about: userData.about || "Hey there! I am using WhatsApp.",
             profilePic: userData.profilePic
-              ? `http://localhost:5000/${userData.profilePic}`
+              ? `${import.meta.env.VITE_API_URL}/${userData.profilePic}`
               : "./defaultPfp.png",
           });
         }
@@ -46,7 +46,7 @@ const Settings = ({setIsAuthenticated}) => {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

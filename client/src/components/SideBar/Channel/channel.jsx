@@ -4,11 +4,11 @@ import { FaPlus } from "react-icons/fa";
 
 const Channels = () => {
   const channels = [
-    { id: 1, name: "Modi Mitrr", img: "./modiMitrr.jpeg", followers: "11.8M followers"},
+    { id: 1, name: "Modi", img: "./modiMitrr.jpeg", followers: "11.8M followers"},
     { id: 2, name: "WhatsApp", img: "./whatsapp.jpg", followers: "223.6M followers"},
     { id: 3, name: "Aaj Tak", img: "./Aajtak.jpg", followers: "23.6M followers"},
-    { id: 4, name: "Pappu", img: "./pappu.jpeg", followers: "5.7M followers"},
-    { id: 5, name: "zero trophies", img: "./RCB.jpg", followers: "8.6M followers"},
+    { id: 4, name: "Rahul", img: "./pappu.jpeg", followers: "5.7M followers"},
+    { id: 5, name: "RCB", img: "./RCB.jpg", followers: "8.6M followers"},
   ];
 
   return (
