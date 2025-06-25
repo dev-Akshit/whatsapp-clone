@@ -66,11 +66,12 @@ function WhatsApp({ setIsAuthenticated, onlineUsers, socket, userData, handleLog
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar setActivePanel={setActivePanel} />
+    <div className={`whatsapp-container ${selectedChat ? 'chat-active' : ''}`}>
+      <div className="appSidebar">
+        <Sidebar setActivePanel={setActivePanel} />
+      </div>
 
-      {/* Left Section Show AllChat or Selected Panel */}
-      <div style={{ flex: 1 }}>
+      <div className="left-section">
         {activePanel === "chats" && (
           <AllChat 
             setSelectedChat={setSelectedChat} 
@@ -93,19 +94,19 @@ function WhatsApp({ setIsAuthenticated, onlineUsers, socket, userData, handleLog
         )}
       </div>
 
-      <div>
+      <div className="right-section">
         {selectedChat ? (
           <>
             <ChatAreaHeader 
               selectedChat={selectedChat} 
               onlineUsers={onlineUsers} 
+              setSelectedChat={setSelectedChat}
             />
             <ChatArea 
               selectedChat={selectedChat} 
               currentUser={currentUser} 
               socket={socket}
             />
-            {/* <ChatAreaFooter /> */}
           </>
         ) : (
           <DefaultPage />

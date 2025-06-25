@@ -28,7 +28,7 @@ function LoginPage({ setIsAuthenticated }) {
         setIsAuthenticated(true);
         
         // Connect to socket and emit userOnline event
-        const socket = io(`${import.meta.env.VITE_SOCKET_URL}`, { withCredentials: true });
+        const socket = io(`${import.meta.env.VITE_API_URL}`, { withCredentials: true });
         
         if (userData && userData._id) {
           socket.emit("userOnline", userData._id);

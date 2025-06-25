@@ -183,16 +183,16 @@ io.on("connection", (socket) => {
     }
     
     if (disconnectedUserId) {
-      console.log(`User ${disconnectedUserId} disconnected (socket: ${socket.id})`);
+      // console.log(`User ${disconnectedUserId} disconnected (socket: ${socket.id})`);
       emitOnlineUsers();
     } else {
-      console.log(`Unknown user disconnected: ${socket.id}`);
+      // console.log(`Unknown user disconnected: ${socket.id}`);
     }
   });
 });
 
 // Start Server
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  // console.log(`Server is running on port ${PORT}`);
   connectDB();
 });

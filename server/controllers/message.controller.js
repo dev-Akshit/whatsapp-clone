@@ -65,7 +65,7 @@ export const sendImage = async (req, res) => {
         return res.status(400).json({ msg: 'No image file provided' });
       }
   
-      console.log('Uploading image to Cloudinary...');
+    //   console.log('Uploading image to Cloudinary...');
       const result = await cloudinary.uploader.upload_stream(
         { folder: 'whatsapp_clone' },
         (error, result) => {
@@ -77,7 +77,7 @@ export const sendImage = async (req, res) => {
         }
       ).end(req.file.buffer);
   
-      console.log('Cloudinary upload result:', result);
+    //   console.log('Cloudinary upload result:', result);
   
       const newMessage = new Message({
         senderId,
@@ -88,7 +88,7 @@ export const sendImage = async (req, res) => {
       });
   
       await newMessage.save();
-      console.log('Saved message:', newMessage);
+    //   console.log('Saved message:', newMessage);
   
       const roomId = [senderId, receiverId].sort().join('-');
       req.io.to(roomId).emit('receiveMessage', newMessage);

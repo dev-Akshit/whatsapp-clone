@@ -115,7 +115,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
   const sendImage = async (imageFile) => {
     if (!imageFile || !socket || !currentUser || !selectedChat) return;
   
-    console.log('Sending image file:', imageFile);
+    // console.log('Sending image file:', imageFile);
   
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -124,7 +124,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
     formData.append("status", "sent");
   
     try {
-      console.log('Sending image to:', `${import.meta.env.VITE_API_URL}/api/message/image`);
+      // console.log('Sending image to:', `${import.meta.env.VITE_API_URL}/api/message/image`);
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/message/image`, {
         method: "POST",
         credentials: "include",
@@ -133,7 +133,7 @@ const ChatArea = ({ selectedChat, currentUser, socket }) => {
   
       if (response.ok) {
         const newImageMessage = await response.json();
-        console.log('Received image message:', newImageMessage);
+        // console.log('Received image message:', newImageMessage);
         setMessages((prev) => [...prev, newImageMessage]);
         socket.emit("sendImage", { ...newImageMessage, alreadySaved: true });
       } else {

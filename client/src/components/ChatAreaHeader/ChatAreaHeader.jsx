@@ -1,19 +1,30 @@
 import React from "react";
 import styles from "./ChatAreaHeader.module.css";
-import { FaSearch, FaEllipsisV } from "react-icons/fa";
+import { FaSearch, FaEllipsisV, FaArrowLeft } from "react-icons/fa";
 import { IoVideocam } from "react-icons/io5";
 
-const ChatAreaHeader = ({ selectedChat, onlineUsers }) => {
+const ChatAreaHeader = ({ selectedChat, onlineUsers, setSelectedChat }) => {
   const getImageUrl = (profilePic) => {
-    return profilePic ? `${import.meta.env.VITE_API_URL}/${profilePic}`
+    return profilePic
+      ? `${import.meta.env.VITE_API_URL}/${profilePic}`
       : "./defaultPfp.png";
-  }
+  };
+
   // Check if the selected user is online
   const isUserOnline = selectedChat && onlineUsers?.includes(selectedChat._id);
-  // console.log(selectedChat._id);
+
+  const handleBackClick = () => {
+    setSelectedChat(null); // Clear selected chat to return to AllChat
+  };
+
   return (
     <div className={styles.header}>
       <div className={styles.userInfo}>
+        <FaArrowLeft
+          className={styles.backIcon}
+          onClick={handleBackClick}
+          size="24"
+        />
         <img
           src={getImageUrl(selectedChat?.profilePic)}
           alt={selectedChat?.username || "User"}

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./metaAI.module.css";
+import styles from "./metaai.module.css";
 
 const MetaAI = () => {
   return (

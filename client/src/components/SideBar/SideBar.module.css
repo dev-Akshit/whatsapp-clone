@@ -1,25 +1,32 @@
 .sidebar {
-  height: 100vh;
-  background-color: #1e2d36;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 0;
+  background-color: #1e2d36;
+  height: 100%; /* Ensure it takes the full height of the parent */
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* Distribute icons evenly */
+  height: 100%; /* Take full height to allow space-between to work */
+  width: 100%; /* Ensure it takes the full width for centering */
 }
 
 .iconWrapper {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0;
+  position: relative;
 }
 
 .icon {
   color: #b1b3b5;
-  font-size: 20px;
-  margin-bottom: 8px;
+  font-size: 22px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -28,7 +35,7 @@
   color: white;
 }
 
-.metaIcon{
+.metaIcon {
   width: 25px;
   height: 25px;
   object-fit: cover;
@@ -38,13 +45,13 @@
 /* Tooltip Styling */
 .tooltip {
   position: absolute;
-  left: 45px;
+  left: 50px;
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
   padding: 6px 10px;
   border-radius: 20px;
-  font-size: 16px;
-  font-style: arial;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
@@ -58,9 +65,58 @@
   transform: translateY(0);
   z-index: 100;
 }
+
 @media (max-width: 768px) {
   .sidebar {
-    width: 60px;
-    padding: 10px;
+    flex-direction: row;
+    height: 60px;
+    width: 100%;
+    padding: 0;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .iconContainer {
+    flex-direction: row;
+    justify-content: space-between; /* Distribute icons evenly in horizontal layout */
+    height: 100%; /* Match the sidebar height */
+    width: 100%; /* Take full width for even spacing */
+  }
+
+  .iconWrapper {
+    padding: 10px; /* Touch-friendly padding */
+    margin: 0;
+  }
+
+  .icon {
+    font-size: 18px;
+  }
+
+  .metaIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tooltip {
+    display: none; /* Hide tooltips on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    height: 50px;
+  }
+
+  .icon {
+    font-size: 16px;
+  }
+
+  .metaIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .iconWrapper {
+    padding: 8px;
   }
 }

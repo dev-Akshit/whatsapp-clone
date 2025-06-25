@@ -1,156 +1,238 @@
 .headerContainer {
-    background-color: #111b21;
-    /* padding: 10px; */
-    border-bottom: 1px solid #2a3942;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: rgb(230, 224, 224);
-    padding-left: 10px;
-  }
-  
-  .headerText{
-    margin-top: 10px;
-  }
+  background-color: #111b21;
+  border-bottom: 1px solid #2a3942;
+  padding: 0.5rem 1rem; /* Responsive padding */
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  .icons {
-    display: flex;
-    gap: 20px;
-    padding: 10px;
-    border-radius: 50%;
-  }
-  
-  .icon {
-    cursor: pointer;
-    font-size: 18px;
-    transition: color 0.3s;
-  }
-  
-  .icon:hover {
-    color: #00a884;
-  }
-  
-  .chat{
-    height: 120px;
-    width: 180px;
-    margin-top: 31vh;
-    margin-left: 25vh;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: fixed;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #2a3942;
-    color: #ffffff;
-    z-index: 1;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgb(230, 224, 224);
+  padding: 0.5rem 0;
+}
+
+.headerText {
+  margin: 0;
+  font-size: clamp(1.2rem, 3vw, 1.5rem); /* Responsive font size */
+}
+
+.icons {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1rem); /* Responsive gap */
+  align-items: center;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: clamp(1rem, 2.5vw, 1.2rem); /* Responsive icon size */
+  transition: color 0.3s;
+}
+
+.icon:hover {
+  color: #00a884;
+}
+
+.chat {
+  position: absolute;
+  top: 3.5rem; /* Position below header */
+  right: 1rem; /* Align to right edge */
+  width: clamp(150px, 40vw, 200px); /* Responsive width */
+  background-color: #2a3942;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 0.75rem;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 .chatItem {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 0.5rem;
   cursor: pointer;
+  border-radius: 8px;
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
 }
 
 .chatItem:hover {
   background-color: #3f4c53;
-  border-radius: 10px;
 }
 
 .headIcon {
-    color: #ffffff;
-    font-size: 24px;
-    margin-right: 12px;
-    background-color: #00a884;
-    border-radius: 50%;
-    padding: 5px;
+  color: #ffffff;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin-right: 0.75rem;
+  background-color: #00a884;
+  border-radius: 50%;
+  padding: 0.3rem;
 }
 
 .menuBar {
-  margin-top: 40vh;
-  margin-left: 23vh;
-  margin-right: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: fixed;
-  padding: 10px;
-  border-radius: 10px;
+  position: absolute;
+  top: 3.5rem; /* Position below header */
+  right: 1rem; /* Align to right edge */
+  width: clamp(150px, 40vw, 200px); /* Responsive width */
   background-color: #2a3942;
   color: #ffffff;
-  z-index: 1;
+  border-radius: 10px;
+  padding: 0.75rem;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .menuItem {
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
-  gap: 10px;
-  font-size: 16px;
-  cursor: pointer;
+  gap: 0.5rem;
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
 }
 
 .menuIcon {
-  padding: 5px;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 .menuIcon:hover {
   background-color: #3f4c53;
-  border-radius: 10px;
   transition: background-color 0.3s;
 }
-  
-  /* Search Bar */
+
+/* Search Bar */
+.searchBar {
+  display: flex;
+  align-items: center;
+  background-color: #1b262e;
+  border-radius: 20px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.searchIcon {
+  color: #b1b3b5;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  margin-right: 0.5rem;
+}
+
+.searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  width: 100%;
+  font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+}
+
+/* Filter Tabs */
+.filterTabs {
+  display: flex;
+  gap: clamp(0.5rem, 1.5vw, 0.75rem);
+  padding: 0.5rem 0;
+  overflow-x: auto; /* Allow horizontal scroll on small screens */
+  scrollbar-width: none;
+}
+
+.filterTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.filterTabs button {
+  background-color: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: #b1b3b5;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  white-space: nowrap;
+}
+
+.filterTabs button:hover {
+  background-color: #2a3942;
+}
+
+.activeTab {
+  background-color: #00a884 !important;
+  color: white !important;
+}
+
+/* Media Queries for Responsiveness */
+
+/* Small screens (mobile, <= 600px) */
+@media (max-width: 600px) {
+  .headerContainer {
+    padding: 0.5rem;
+  }
+
+  .header {
+    padding: 0.25rem 0;
+  }
+
+  .chat,
+  .menuBar {
+    width: 90vw; /* Full width minus padding */
+    right: 0.5rem;
+    top: 3rem;
+  }
+
+  .chatItem,
+  .menuIcon {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .headIcon {
+    font-size: 1.2rem;
+    padding: 0.25rem;
+  }
+
   .searchBar {
-    display: flex;
-    align-items: center;
-    background-color: #1b262e;
-    border-radius: 20px;
-    padding: 5px 10px;
+    padding: 0.4rem 0.6rem;
   }
-  
-  .searchIcon {
-    color: #b1b3b5;
-    font-size: 14px;
-  }
-  
-  .searchInput {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    margin-left: 10px;
-    width: 100%;
-  }
-  
-  /* Filter Tabs */
+
   .filterTabs {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
   }
-  
+
   .filterTabs button {
-    background-color: transparent;
-    border: none;
-    padding: 8px 12px;
-    color: #b1b3b5;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
-  
-  .filterTabs button:hover {
-    background-color: #2a3942;
+}
+
+/* Medium screens (tablets, 601px - 900px) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .headerContainer {
+    padding: 0.75rem;
   }
-  
-  .activeTab {
-    background-color: #00a884 !important;
-    color: white !important;
+
+  .chat,
+  .menuBar {
+    width: 50vw;
+    right: 0.75rem;
   }
-  
+
+  .filterTabs {
+    gap: 0.75rem;
+  }
+}
+
+/* Large screens (desktops, > 900px) */
+@media (min-width: 901px) {
+  .headerContainer {
+    padding: 1rem;
+  }
+
+  .chat,
+  .menuBar {
+    width: 200px;
+    right: 1rem;
+  }
+}

@@ -73,7 +73,7 @@ const AllChatHeader = ({ searchQuery, setSearchQuery , setIsAuthenticated}) => {
           <div className={styles.newChat}>
             <RiChatNewFill 
               className={styles.icon}
-              ref={newChatButtonRef}
+              ref={newChatButtonRef} 
               onClick={toggleNewChat}
             />
           </div>

@@ -15,7 +15,7 @@ function App() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(`${import.meta.env.VITE_SOCKET_URL}`, {
+    const newSocket = io(`${import.meta.env.VITE_API_URL}`, {
       withCredentials: true
     });
     setSocket(newSocket);

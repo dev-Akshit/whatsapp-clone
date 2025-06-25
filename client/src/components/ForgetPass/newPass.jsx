@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './forgetPass.module.css';
+import styles from './forgetpass.module.css';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 
